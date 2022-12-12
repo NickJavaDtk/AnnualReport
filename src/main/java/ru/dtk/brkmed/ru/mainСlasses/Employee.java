@@ -1,20 +1,38 @@
 package ru.dtk.brkmed.ru.mainСlasses;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.persistence.*;
+import org.hibernate.*;
 
-public class Employee {
-    private int idEmployee;
+@Entity
+@Table(name = "Employee")
+public class Employee implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long idEmployee;
+    @Column (nullable = true)
     private String name;
+    @Column (nullable = true)
     private String surname;
+    @Column (nullable = true)
     private String patronymic;
+    @Column (nullable = true)
 
     private String currentPosition;
     private boolean signatureAvailability;
-    private GregorianCalendar beginningSignature;
-    private GregorianCalendar endSignature;
+    @Temporal(TemporalType.DATE)
+    private Date beginningSignature;
+    @Temporal(TemporalType.DATE)
+    private Date endSignature;
 
-    public Employee(int idEmployee, String name, String surname, String patronymic, String currentPosition, boolean signatureAvailability, GregorianCalendar beginningSignature, GregorianCalendar endSignature) {
-        this.idEmployee = idEmployee;
+    public Employee() {
+
+    }
+
+    public Employee(String name, String surname, String patronymic, String currentPosition, boolean signatureAvailability, Date beginningSignature, Date endSignature) {
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
@@ -22,14 +40,6 @@ public class Employee {
         this.signatureAvailability = signatureAvailability;
         this.beginningSignature = beginningSignature;
         this.endSignature = endSignature;
-    }
-
-    public int getIdEmployee() {
-        return idEmployee;
-    }
-
-    public void setIdEmployee(int idEmployee) {
-        this.idEmployee = idEmployee;
     }
 
     public String getName() {
@@ -72,19 +82,20 @@ public class Employee {
         this.signatureAvailability = signatureAvailability;
     }
 
-    public GregorianCalendar getBeginningSignature() {
-        return beginningSignature;
-    }
-
-    public void setBeginningSignature(GregorianCalendar beginningSignature) {
-        this.beginningSignature = beginningSignature;
-    }
-
-    public GregorianCalendar getEndSignature() {
-        return endSignature;
-    }
-
-    public void setEndSignature(GregorianCalendar endSignature) {
-        this.endSignature = endSignature;
-    }
+//    public GregorianCalendar getBeginningSignature() {
+//        return beginningSignature;
+//    }
+//
+//    public void setBeginningSignature(GregorianCalendar beginningSignature) {
+//        this.beginningSignature = beginningSignature;
+//    }
+//
+//    public GregorianCalendar getEndSignature() {
+//        return endSignature;
+//    }
+//
+//    public void setEndSignature(GregorianCalendar endSignature) {
+//        this.endSignature = endSignature;
+//    }
+//}
 }

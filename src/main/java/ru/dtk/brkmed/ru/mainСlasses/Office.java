@@ -57,7 +57,7 @@ public class Office implements OfficeBuilder, Serializable {
 
     @Override
     public OfficeBuilder setEmployee() {
-        this.employee = new Employee(idEmployee, nameEmploee, surnameEmploee, patronymicEmploee, currentPosition, signatureAvailability, beginningSignature, endSignature);
+ //       this.employee = new Employee(idEmployee, nameEmploee, surnameEmploee, patronymicEmploee, currentPosition, signatureAvailability, beginningSignature, endSignature);
         return this;
     }
 
