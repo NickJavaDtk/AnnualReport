@@ -35,9 +35,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.dtk.brkmed.ru.gui.controlers.ControlerFX">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.brkmed.dtk.gui.controlers.ControlerFX">
   <children>
-    <MenuBar VBox.vgrow="NEVER">
+    <MenuBar VBox.vgrow="ALWAYS">
       <menus>
         <Menu mnemonicParsing="false" text="File">
           <items>
