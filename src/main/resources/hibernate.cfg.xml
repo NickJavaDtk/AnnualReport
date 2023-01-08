@@ -25,9 +25,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.references.Employee"/>
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.references.Unit"/>
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.references.Building"/>
+        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Employee"/>
+        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Unit"/>
+        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Building"/>
 
     </session-factory>
 </hibernate-configuration>

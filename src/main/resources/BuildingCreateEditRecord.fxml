@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="182.0" prefWidth="710.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.brkmed.dtk.gui.controlers.ControlerBuildingCreateEditRecord">
+   <children>
+      <GridPane layoutX="-1.0" layoutY="2.0" prefHeight="118.0" prefWidth="710.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="106.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="610.0" minWidth="10.0" prefWidth="604.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="104.0" minHeight="10.0" prefHeight="65.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="128.0" minHeight="10.0" prefHeight="58.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label prefHeight="25.0" prefWidth="125.0" text="Название здания" textAlignment="CENTER">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Адрес здания" textAlignment="CENTER" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="txtFileldNameBuild" GridPane.columnIndex="1" />
+            <TextField fx:id="txtFileldAdressBuild" prefHeight="26.0" prefWidth="519.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <AnchorPane layoutX="262.0" layoutY="120.0" prefHeight="55.0" prefWidth="200.0" AnchorPane.leftAnchor="262.0" AnchorPane.rightAnchor="248.0" AnchorPane.topAnchor="120.0">
+         <children>
+            <Button fx:id="btnBuldCrEdit" layoutX="39.0" mnemonicParsing="false" onAction="#btnSave" prefHeight="48.0" prefWidth="123.0" text="Сохранить" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="39.0" AnchorPane.rightAnchor="38.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
