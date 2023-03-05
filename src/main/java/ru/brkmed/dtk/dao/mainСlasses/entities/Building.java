@@ -2,6 +2,8 @@ package ru.brkmed.dtk.dao.mainСlasses.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 //класс Зданий
@@ -16,6 +18,8 @@ public class Building implements Serializable {
     private String adressBuilding;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     protected Unit unit;
+    @OneToMany(mappedBy = "build")
+    public Collection<Connection> listConnection = new ArrayList<>(  );
 
     public Building() {
 

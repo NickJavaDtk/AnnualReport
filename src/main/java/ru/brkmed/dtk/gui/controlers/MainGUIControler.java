@@ -25,6 +25,9 @@ public class MainGUIControler {
     private MenuItem menuItemBuilding;
 
     @FXML
+    private MenuItem menuItemConnections;
+
+    @FXML
     private MenuItem menuItemEmploee;
 
     @FXML
@@ -45,6 +48,11 @@ public class MainGUIControler {
         guiBuilding.createAddTab(mainTabPane);
 
 
+    }
+
+    public void createConnections(ActionEvent actionEvent) {
+        ControlerGUIConnections guiConnections = new ControlerGUIConnections();
+        guiConnections.createAddTab(mainTabPane);
     }
 
     @FXML
@@ -70,4 +78,6 @@ public class MainGUIControler {
     public TabPane getMainTabPane() {
         return mainTabPane;
     }
+
+
 }

@@ -68,9 +68,10 @@
         </Menu>
         <Menu mnemonicParsing="false" text="Справочники">
           <items>
+                  <MenuItem fx:id="menuItemBuilding" mnemonicParsing="false" onAction="#createBuilding" text="Здания" />
+                  <MenuItem fx:id="menuItemConnections" mnemonicParsing="false" onAction="#createConnections" text="Подключения" />
             <MenuItem fx:id="menuItemEmploee" mnemonicParsing="false" onAction="#createEmploee" text="Сотрудники" />
                   <MenuItem fx:id="menuItemUnit" mnemonicParsing="false" onAction="#createUnit" text="Подразделения" />
-                  <MenuItem fx:id="menuItemBuilding" mnemonicParsing="false" onAction="#createBuilding" text="Здания" />
             <MenuItem fx:id="menuItemPM" mnemonicParsing="false" onAction="#createPM" text="Рабочие места" />
             <MenuItem fx:id="menuItemPrinter" mnemonicParsing="false" onAction="#createPrinter" text="Принтера и МФУ" />
           </items>

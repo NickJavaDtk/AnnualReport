@@ -28,6 +28,7 @@
         <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Employee"/>
         <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Unit"/>
         <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Building"/>
+        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Connection"/>
 
     </session-factory>
 </hibernate-configuration>
