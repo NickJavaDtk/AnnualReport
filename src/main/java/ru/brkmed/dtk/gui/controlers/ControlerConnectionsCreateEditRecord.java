@@ -1,20 +1,15 @@
 package ru.brkmed.dtk.gui.controlers;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import ru.brkmed.dtk.dao.mainСlasses.entities.Building;
-import ru.brkmed.dtk.dao.mainСlasses.entities.Connection;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.ControlerDaoBuilding;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.ControlerDaoConnection;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
 
-import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.ZoneId;
 import java.util.ArrayList;

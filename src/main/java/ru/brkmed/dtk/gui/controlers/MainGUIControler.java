@@ -45,7 +45,9 @@ public class MainGUIControler {
     @FXML
     void createBuilding(ActionEvent event) {
         ControlerGUIBuilding guiBuilding = new ControlerGUIBuilding();
-        guiBuilding.createAddTab(mainTabPane);
+        //guiBuilding.createAddTab(mainTabPane);
+       // ControlerGUIBuilding gdd = new AbstractGUIControler(  )
+        guiBuilding.alternativeTab(mainTabPane);
 
 
     }

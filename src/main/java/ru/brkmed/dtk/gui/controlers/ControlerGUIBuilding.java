@@ -17,8 +17,9 @@ import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import ru.brkmed.dtk.dao.mainСlasses.entities.Building;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.ControlerDaoBuilding;
+import ru.brkmed.dtk.dao.mainClasses.entityes.AbstractEntity;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
 import ru.brkmed.dtk.gui.model.ListNodes;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ControlerGUIBuilding implements Initializable {
+public class ControlerGUIBuilding extends AbstractGUIControler implements Initializable {
     ObservableList<Building> observableList = null;
 
 
@@ -41,6 +42,27 @@ public class ControlerGUIBuilding implements Initializable {
 
     static Stage getStage;
 
+    //----------------------------------
+
+    private  TableView<Building> tableBuilding;
+
+    public static Button create;
+
+    public static Button edit;
+
+    private Button button;
+
+    private List<Button> buttons;
+
+    public static ControlerGUIBuilding controlerGUIBuilding;
+
+    public static Building buildRecord;
+
+    private ObservableList<Building> obsBuild;
+
+    private Stage stage;
+
+/*
 
 
     public void createAddTab(TabPane tabPane) {
@@ -185,6 +207,8 @@ public class ControlerGUIBuilding implements Initializable {
 
     }
 
+
+
     public TableView<Building> getCurrentTableView(AnchorPane externAnchorPane) {
         TableView<Building> listBuilding = new TableView<>( );
         listBuilding.setLayoutY(46.0);
@@ -218,6 +242,8 @@ public class ControlerGUIBuilding implements Initializable {
         listBuilding.getSelectionModel().select(0);
         return listBuilding;
     }
+
+
 
     public ObservableList<Building> getObsBuilding() {
         ObservableList<Building> observableList = FXCollections.observableArrayList();
@@ -276,4 +302,128 @@ public class ControlerGUIBuilding implements Initializable {
         this.buttonList = buttonList;
     }
 
+*/
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
+    }
+
+    public void alternativeTab(TabPane tabPane) {
+        super.basicWindowTab(tabPane, "Новый путь зданий");
+        create = super.getCreateButton();
+        super.getNewDialogWindow(create,
+                "/BuildingCreateEditRecord.fxml", "Создать здание по новому пути");
+        edit = super.getEditButton();
+        super.getNewDialogWindow(edit,
+                "/BuildingCreateEditRecord.fxml", "Изменить здание по новому пути");
+        setButton(super.getPresButton());
+
+    }
+
+    public Button getCreate() {
+        return create;
+    }
+
+    public ControlerGUIBuilding() {
+    }
+
+    public ControlerGUIBuilding(List<Button> buttons, TableView<Building> tableBuilding, Stage stage) {
+        this.buttons = buttons;
+        this.tableBuilding = tableBuilding;
+        this.stage = stage;
+    }
+
+    public Button getEdit() {
+        return edit;
+    }
+
+    @Override
+    public ObservableList<? extends AbstractEntity> getObservableList() {
+        ObservableList<Building> observableList = FXCollections.observableArrayList();
+        observableList.sorted();
+        List<Building> buildingList = new ControlerDaoBuilding().listBuilding();
+        for(Building build : buildingList) {
+            observableList.add(build);
+        }
+        return observableList;
+    }
+
+    @Override
+    public void setValueTableView(TableView<? extends AbstractEntity> tableView) {
+        tableBuilding = (TableView<Building>) super.getTableView();
+        TableColumn<Building, Long> idBuilding = new TableColumn<>("ID здания");
+        idBuilding.setPrefWidth(45.0);
+        idBuilding.setCellValueFactory(new PropertyValueFactory<Building, Long>("Id"));
+        TableColumn<Building, String> nameBuilding = new TableColumn<>("Название здания");
+        nameBuilding.setPrefWidth(275.0);
+        nameBuilding.setCellValueFactory(new PropertyValueFactory<Building, String>("nameBuilding"));
+        TableColumn<Building, String> adressBuilding = new TableColumn<>( "Адрес здания" );
+        adressBuilding.setPrefWidth(275.0);
+        adressBuilding.setCellValueFactory(new PropertyValueFactory<Building, String>("adressBuilding"));
+        tableBuilding.getColumns( ).add(idBuilding);
+        tableBuilding.getColumns( ).add(nameBuilding);
+        tableBuilding.getColumns( ).add(adressBuilding);
+        obsBuild = (ObservableList<Building>) getObservableList( );
+        tableBuilding.setItems(obsBuild);
+        tableBuilding.getSelectionModel( ).select(0);
+
+    }
+
+    @Override
+    public void fillValuesEditWindow(Parent parent) {
+        ArrayList<Node> listNodes = ListNodes.getAllNodes(parent );
+        TextField nameBuild = (TextField) listNodes.get(3);
+        TextField adressBuild = (TextField) listNodes.get(4);
+        Button saveOrEdit = (Button) listNodes.get(6);
+        buildRecord = (Building) super.getRecordTableView();
+        nameBuild.setText(buildRecord.getNameBuilding());
+        adressBuild.setText(buildRecord.getAdressBuilding());
+    }
+
+    @Override
+    public void addEventStage() {
+
+        super.getStage( ).addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+            }
+        });
+    }
+
+    @Override
+    public AbstractGUIControler addListButton(List<Button> buttonList, Button button, Stage stage) {
+        buttonList.add(button);
+        tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+        controlerGUIBuilding = new ControlerGUIBuilding( buttonList, tableBuilding, stage );
+        return controlerGUIBuilding;
+    }
+
+
+    public Button getButton() {
+        return button;
+    }
+
+    public void setButton(Button button) {
+        this.button = button;
+    }
+
+    public List<Button> getButtons() {
+        return buttons;
+    }
+
+    public TableView<Building> getTableBuilding() {
+        return tableBuilding;
+    }
+
+    public ObservableList<Building> getObsBuild() {
+        return obsBuild;
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
 }

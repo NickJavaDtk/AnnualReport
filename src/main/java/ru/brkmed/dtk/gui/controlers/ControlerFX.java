@@ -2,7 +2,7 @@ package ru.brkmed.dtk.gui.controlers;
 
 import javafx.event.Event;
 import javafx.scene.control.*;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.TestControler;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.TestControler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

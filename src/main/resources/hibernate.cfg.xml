@@ -25,10 +25,10 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Employee"/>
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Unit"/>
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Building"/>
-        <mapping class="ru.brkmed.dtk.dao.mainСlasses.entities.Connection"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Employee"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Unit"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Building"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Connection"/>
 
     </session-factory>
 </hibernate-configuration>

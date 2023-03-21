@@ -15,18 +15,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import javafx.util.converter.DateStringConverter;
-import ru.brkmed.dtk.dao.mainСlasses.entities.Building;
-import ru.brkmed.dtk.dao.mainСlasses.entities.Connection;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.ControlerDaoBuilding;
-import ru.brkmed.dtk.dao.mainСlasses.references.controler.ControlerDaoConnection;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
 import ru.brkmed.dtk.gui.model.ListNodes;
 
 import java.io.IOException;
@@ -38,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
 public class ControlerGUIConnections implements Initializable {
@@ -435,7 +431,9 @@ public class ControlerGUIConnections implements Initializable {
     }
 
     public ObservableList<String> getObsBuildConnect() {
-        ObservableList<Building> obsBuild = new ControlerGUIBuilding().getObsBuilding();
+      //  ObservableList<Building> obsBuild = new ControlerGUIBuilding().getObsBuild();
+        AbstractGUIControler absGUI = new ControlerGUIBuilding(  );
+        ObservableList<Building> obsBuild = (ObservableList<Building>) absGUI.getObservableList();
         mapChcBoxBuild = new HashMap<>();
         List<String> listNameBuild = new ArrayList<>();
         ObservableList<String> obsListNameBuild = FXCollections.observableArrayList();
