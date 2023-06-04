@@ -1,22 +1,30 @@
 package ru.brkmed.dtk.gui.controlers;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
+import ru.brkmed.dtk.gui.main.AbstractGUIControler;
+import ru.brkmed.dtk.gui.main.GUIBuilding;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ControlerBuildingCreateEditRecord extends AbstractChildWindow {
+public class ControlerBuildingCreateEditRecord extends AbstractChildWindow implements Initializable {
 
     ControlerDaoBuilding daoBuilding = new ControlerDaoBuilding();
 
   //  ControlerGUIBuilding stguBuld = ControlerGUIBuilding.controlerGUIBuilding;
-    Button crt = ControlerGUIBuilding.create;
-    Button edt = ControlerGUIBuilding.edit;
+    Button crt = GUIBuilding.create;
+    Button edt = GUIBuilding.edit;
 
 
 
@@ -57,7 +65,7 @@ public class ControlerBuildingCreateEditRecord extends AbstractChildWindow {
 //            }
 //        }
 
-        List<Button> buttonList = ControlerGUIBuilding.controlerGUIBuilding.getButtons();
+        List<Button> buttonList = GUIBuilding.GUIBuilding.getButtons();
 
         if (buttonList.get(0).getText().equals("Создать")) {
             if( super.checkTextListTxtField(addListTxtField())) {
@@ -66,13 +74,14 @@ public class ControlerBuildingCreateEditRecord extends AbstractChildWindow {
             }
         } else {
             if( super.checkTextListTxtField(addListTxtField())) {
-                Long id = ControlerGUIBuilding.buildRecord.getId();
+                Long id = GUIBuilding.buildRecord.getId();
                 daoBuilding.updateBuild(id, txtFileldNameBuild.getText( ), txtFileldAdressBuild.getText( ));
-                TableView<Building> tableView = ControlerGUIBuilding.controlerGUIBuilding.getTableBuilding();
-                AbstractGUIControler absGUI = new ControlerGUIBuilding(  );
-                ObservableList<Building> observableList = (ObservableList<Building>) absGUI.getObservableList();
+                TableView<Building> tableView = GUIBuilding.GUIBuilding.getTableBuilding();
+                ObservableList<Building> observableList = FXCollections.observableArrayList();
+                List<Building> buildingList = new ControlerDaoBuilding().listBuilding();
+                observableList.addAll(buildingList);
                 tableView.setItems(observableList);
-                ControlerGUIBuilding.controlerGUIBuilding.getStage( ).close( );
+                GUIBuilding.GUIBuilding.getStage( ).close( );
             }
         }
 
@@ -117,5 +126,10 @@ public class ControlerBuildingCreateEditRecord extends AbstractChildWindow {
     @Override
     public List<DatePicker> addListDtpick() {
         return null;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 }

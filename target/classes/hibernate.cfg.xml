@@ -29,6 +29,7 @@
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Unit"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Building"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Connection"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.CurrentPositionFRMR"/>
 
     </session-factory>
 </hibernate-configuration>

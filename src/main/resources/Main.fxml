@@ -43,6 +43,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -71,6 +72,7 @@
                   <MenuItem fx:id="menuItemBuilding" mnemonicParsing="false" onAction="#createBuilding" text="Здания" />
                   <MenuItem fx:id="menuItemConnections" mnemonicParsing="false" onAction="#createConnections" text="Подключения" />
             <MenuItem fx:id="menuItemEmploee" mnemonicParsing="false" onAction="#createEmploee" text="Сотрудники" />
+              <MenuItem fx:id="menuItemNCI" mnemonicParsing="false" onAction="#createNCI" text="Загрузка НСИ" />
                   <MenuItem fx:id="menuItemUnit" mnemonicParsing="false" onAction="#createUnit" text="Подразделения" />
             <MenuItem fx:id="menuItemPM" mnemonicParsing="false" onAction="#createPM" text="Рабочие места" />
             <MenuItem fx:id="menuItemPrinter" mnemonicParsing="false" onAction="#createPrinter" text="Принтера и МФУ" />
@@ -91,7 +93,7 @@
                   <content>
                     <AnchorPane prefHeight="507.0" prefWidth="747.0">
                            <children>
-                              <AnchorPane layoutX="6.0" prefHeight="44.0" prefWidth="264.0" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="2.0">
+                              <AnchorPane layoutX="6.0" prefHeight="44.0" prefWidth="716.0" AnchorPane.bottomAnchor="461.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="2.0">
                                  <children>
                                     <Button fx:id="createCabinet" layoutY="2.0" mnemonicParsing="false" text="Создать" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
                                        <padding>
@@ -108,6 +110,8 @@
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </Button>
+                                    <Label layoutX="529.0" layoutY="19.0" text="Поиск" AnchorPane.rightAnchor="152.0" AnchorPane.topAnchor="19.0" />
+                                    <TextField layoutX="567.0" layoutY="12.0" prefHeight="25.0" prefWidth="149.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="12.0" />
                                  </children>
                               </AnchorPane>
                               <TableView layoutX="2.0" layoutY="46.0" prefHeight="443.0" prefWidth="721.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="46.0">

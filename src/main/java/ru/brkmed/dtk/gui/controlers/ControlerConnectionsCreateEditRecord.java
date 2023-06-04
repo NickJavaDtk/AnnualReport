@@ -1,23 +1,26 @@
 package ru.brkmed.dtk.gui.controlers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
+import ru.brkmed.dtk.gui.main.AbstractGUIControler;
+import ru.brkmed.dtk.gui.main.GUIConnections;
 
-import java.text.DecimalFormat;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ControlerConnectionsCreateEditRecord {
+public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow implements Initializable {
     @FXML
     private Button btnConnectCrEdit;
 
@@ -60,6 +63,32 @@ public class ControlerConnectionsCreateEditRecord {
 
     ControlerDaoConnection contDao = new ControlerDaoConnection();
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        String pattern = "dd.MM.yyyy";
+        dpDateConnect.setPromptText(pattern.toLowerCase( ));
+        dpDateConnect.getEditor( ).focusedProperty( ).addListener(new ChangeListener<Boolean>( )//focus on the TextField object of the DatePicker
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
+                if (newPropertyValue == false) {
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat(dpDateConnect.getEditor( ).getText( ));
+                        sdf.setLenient(false);
+                        //if not valid, it will throw ParseException
+                        Date date = sdf.parse(dpDateConnect.getEditor( ).getText( ));
+                        System.out.println(date);
+                    } catch (Exception e) {
+                        e.printStackTrace( );
+                        dpDateConnect.getEditor( ).setText("");
+                    }
+                }
+            }
+
+            ;
+        });
+    }
+
 
 
 
@@ -92,9 +121,33 @@ public class ControlerConnectionsCreateEditRecord {
 
     @FXML
     void btnSaveConnect(ActionEvent event) {
-        List<Button> guiButton = ControlerGUIConnections.buttonList;
+        List<Button> guiButton = GUIConnections.getControlerGUIConnections( ).getButtonList( );
+        boolean[] array = new boolean[] {super.checkTextListTxtField(addListTxtField()), super.checkTextListChoiceBoxField(addListChcBox()),
+                super.checkTextListDatePickerField(addListDtpick())} ;
+        if (guiButton.get(0).getText().equals("Создать")) {
+            if (super.getBoolValue(array)) {
+                contDao.addConnection(getOverFieldConnection());
+                super.nullSetTxtField(addListTxtField());
+                super.nullSetChcBox(addListChcBox());
+                super.nullSetDtPicker(addListDtpick());
 
-        if(guiButton.get(0).getText().equals("Создать")) {
+            }
+
+        }
+
+        else {
+            if (super.getBoolValue(array)) {
+                Long id = GUIConnections.getConnectRecord().getId();
+                contDao.updateConnections(id, getOverFieldConnection());
+                TableView<Connection> tblView = GUIConnections.getControlerGUIConnections().getTableConnection();
+                AbstractGUIControler absGUI = new GUIConnections(  );
+                ObservableList<Connection> observableList = (ObservableList<Connection>) absGUI.getObservableList();
+                tblView.setItems(observableList);
+                GUIConnections.getControlerGUIConnections().getStage().close();
+            }
+        }
+
+ /*       if(guiButton.get(0).getText().equals("Создать")) {
             checkFieldConnect(txtFieldNameConnect, chcBoxSetBuild, dpDateConnect, txtFieldSuplier,
                     chcBoxTypeConnect, txtFieldConnect, txtFieldTax, txtFieldConnectionTax, chcBoxTypeTax);
             boolean checkLuck = choiceBoolConnect(txtFieldNameConnect, chcBoxSetBuild, dpDateConnect, txtFieldSuplier,
@@ -164,14 +217,14 @@ public class ControlerConnectionsCreateEditRecord {
                 contDao.updateConnections(id, getOverFieldConnection());
                // saveBtn = true;
                // if(saveBtn) {
-                    ObservableList<Connection> obsBuild = new ControlerGUIConnections().getObsConnection();
+                    ObservableList<Connection> obsBuild = (ObservableList<Connection>) new ControlerGUIConnections().getObservableList();
                     TableView<Connection> tblView = ControlerGUIConnections.getTableConnections;
                     tblView.setItems(obsBuild);
-                    ControlerGUIConnections.getStage.close();
+                    ControlerGUIConnections.getStage().close();
                // }
             }
         }
-
+*/
     }
 
     public void setChcBoxSetBuild(ChoiceBox<String> chcBoxSetBuild) {
@@ -254,7 +307,7 @@ public class ControlerConnectionsCreateEditRecord {
     public Connection getOverFieldConnection() {
         Connection connect = new Connection();
         connect.setNameConnection(txtFieldNameConnect.getText());
-        Map<Long, Building> choice = ControlerGUIConnections.mapChcBoxBuild;
+        Map<Long, Building> choice = GUIConnections.getMapChcBoxBuild();
         Building build = null;
         String nameCon = chcBoxSetBuild.getValue();
         for(Map.Entry<Long, Building> map : choice.entrySet()) {
@@ -268,38 +321,19 @@ public class ControlerConnectionsCreateEditRecord {
         connect.setDateConnection(date);
         connect.setSuplier(txtFieldSuplier.getText());
         connect.setTypeConnection(chcBoxTypeConnect.getValue());
-        String sConn = replaceDouble(txtFieldConnect.getText());
+        String sConn = super.replaceDouble(txtFieldConnect.getText());
         Double dConn = Double.parseDouble(sConn);
         connect.setSpeedConnection(dConn);
-        sConn = replaceDouble(txtFieldTax.getText());
+        sConn = super.replaceDouble(txtFieldTax.getText());
         Double dTax = Double.parseDouble(sConn);
         connect.setTax(dTax);
-        sConn = replaceDouble(txtFieldConnectionTax.getText());
+        sConn = super.replaceDouble(txtFieldConnectionTax.getText());
         Double dStTax = Double.parseDouble(sConn);
         connect.setStartTax(dStTax);
         connect.setTypeTax(chcBoxTypeTax.getValue());
         return connect;
     }
 
-    public  String replaceDouble(String s) {
-
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        String exit = getString(s.toCharArray());
-        return getString(decimalFormat.format(Double.parseDouble(exit)).toCharArray());
-    }
-
-    public  String getString (char[] chars) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] == ',') {
-                chars[i] = '.';
-            }
-        }
-
-        sb.append(chars);
-        return sb.toString( );
-    }
 
     public List<Parent> getMinSceneList() {
         List<Parent> list = new ArrayList<>();
@@ -311,5 +345,32 @@ public class ControlerConnectionsCreateEditRecord {
     }
 
 
+    @Override
+    public List<TextField> addListTxtField() {
+     //   txtFieldNameConnect, chcBoxSetBuild, dpDateConnect, txtFieldSuplier,
+       //         chcBoxTypeConnect, txtFieldConnect, txtFieldTax, txtFieldConnectionTax, chcBoxTypeTax
+        List<TextField> txtList = new ArrayList<>(  );
+        txtList.add(txtFieldNameConnect);
+        txtList.add(txtFieldSuplier);
+        txtList.add(txtFieldConnect);
+        txtList.add(txtFieldTax);
+        txtList.add(txtFieldConnectionTax);
+        return txtList;
+    }
 
+    @Override
+    public List<ChoiceBox<String>> addListChcBox() {
+        List<ChoiceBox<String>> chcList = new ArrayList<>(  );
+        chcList.add(chcBoxSetBuild);
+        chcList.add(chcBoxTypeConnect);
+        chcList.add(chcBoxTypeTax);
+        return chcList;
+    }
+
+    @Override
+    public List<DatePicker> addListDtpick() {
+        List<DatePicker> dpConnect = new ArrayList<>();
+        dpConnect.add(dpDateConnect);
+        return dpConnect;
+    }
 }

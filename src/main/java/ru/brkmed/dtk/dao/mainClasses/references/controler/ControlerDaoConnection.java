@@ -36,9 +36,9 @@ public class ControlerDaoConnection {
         SimpleDateFormat formatDate = new SimpleDateFormat( "yyyy-MM-dd", Locale.ENGLISH );
         try {
             tx = session.beginTransaction();
-            List  buildingTmp =  session.createQuery("select c.Id, c.nameConnection, c.build, c.dateConnection," +
+            List  connectionTmp =  session.createQuery("select c.Id, c.nameConnection, c.build, c.dateConnection," +
                     "c.suplier, c.typeConnection, c.speedConnection, c.tax, c.startTax, c.typeTax FROM Connection c").list();
-            for (Iterator iterator = buildingTmp.iterator(); iterator.hasNext();){
+            for (Iterator iterator = connectionTmp.iterator(); iterator.hasNext();){
                 Object[] obj = (Object[])iterator.next();
                 Long id = Long.parseLong(String.valueOf(obj[0]));
                 String nameConnect = String.valueOf(obj[1]);
@@ -106,6 +106,24 @@ public class ControlerDaoConnection {
             if (tx != null) tx.rollback( );
             e.printStackTrace( );
 
+        } finally {
+            session.close();
+        }
+    }
+
+    public void deleteConnection(Long Id){
+        Session session = ControlerDaoBuilding.getFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Connection connect = (Connection) session.get(Connection.class, Id);
+            connect.setBuild(null);
+            session.delete(connect);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
         } finally {
             session.close();
         }

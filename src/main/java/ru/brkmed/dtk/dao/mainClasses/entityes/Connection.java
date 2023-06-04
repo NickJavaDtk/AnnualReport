@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Connection implements Serializable {
+public class Connection extends AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
@@ -140,5 +140,15 @@ public class Connection implements Serializable {
 
     public void setTypeTax(String typeTax) {
         this.typeTax = typeTax;
+    }
+
+    public String[] getObsTypeConnect() {
+        String[] obsType = new String[]{"Модем", "DSL", "Оптоволокно", "Радиодоступ", "Спутниковый канал", "VPN" };
+        return obsType;
+    }
+
+    public String[] getObsTypeTax() {
+        String[] obsType = new String[]{"Оператор связи", "Региональный бюджет", "Собственные средства МО", "Федеральный бюджет", "Фонд ОМС", "Не указано" };
+        return obsType;
     }
 }

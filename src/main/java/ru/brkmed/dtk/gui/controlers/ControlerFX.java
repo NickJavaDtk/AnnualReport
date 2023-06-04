@@ -107,9 +107,9 @@ public class ControlerFX extends Application implements Initializable {
       inputText();
     if (testControler == null) {
         testControler = new TestControler();
-        testControler.addEmployee(nameS, surnameS, patronymicS, cPositionS, sertB, startCertS, endSertS);
+ //       testControler.addEmployee(nameS, surnameS, patronymicS, cPositionS, sertB, startCertS, endSertS);
     } else {
-        testControler.addEmployee(nameS, surnameS, patronymicS, cPositionS, sertB, startCertS, endSertS);
+ //       testControler.addEmployee(nameS, surnameS, patronymicS, cPositionS, sertB, startCertS, endSertS);
     }
 
     }

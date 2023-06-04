@@ -13,7 +13,7 @@ public class Building extends AbstractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     @Column(nullable = false)
-    public String nameBuilding;
+    private String nameBuilding;
     @Column(nullable = false)
     private String adressBuilding;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

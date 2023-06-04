@@ -87,4 +87,21 @@ public class ControlerDaoBuilding {
             session.close();
         }
     }
+
+    public void deleteBuild(Long Id){
+        Session session = ControlerDaoBuilding.getFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Building build = (Building) session.get(Building.class, Id);
+            session.delete(build);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null)
+                tx.rollback();
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
 }

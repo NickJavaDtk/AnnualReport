@@ -2,100 +2,156 @@ package ru.brkmed.dtk.dao.mainClasses.entityes;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.*;
 
 import com.sun.istack.NotNull;
 
 @Entity
 @Table(name = "Employee")
-public class Employee implements Serializable {
+public class Employee extends AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idEmployee;
-    @Column (nullable = true)
+    private Long Id;
+    @Column (nullable = false, name = "name")
     @NotNull
-    private String name;
-    @Column (nullable = true)
-    private String surname;
-    @Column (nullable = true)
-    private String patronymic;
-    @Column (nullable = true)
-
-    private String currentPosition;
-    private boolean signatureAvailability;
+    private String fullName;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private CurrentPositionFRMR currentPosition;
+    @Column (name = "start_cert")
     @Temporal(TemporalType.DATE)
     private Date beginningSignature;
+    @Column (name = "end_cert")
     @Temporal(TemporalType.DATE)
     private Date endSignature;
+    @Column (name = "type_position")
+    private String typePosition;
+    @Column (name = "is_main")
+    private boolean mainPosition;
+    
+    private String inn;    
+   
+    private String snils;
+    
+    private String fon;
+    
+
+
 
     public Employee() {
 
     }
 
-    public Employee(String name, String surname, String patronymic, String currentPosition, boolean signatureAvailability, Date beginningSignature, Date endSignature) {
-        this.name = name;
-        this.surname = surname;
-        this.patronymic = patronymic;
+    public Employee(String fullName, CurrentPositionFRMR currentPosition, Date beginningSignature, Date endSignature, String typePosition, boolean mainPosition, String inn, String snils, String fon) {
+        this.fullName = fullName;
         this.currentPosition = currentPosition;
-        this.signatureAvailability = signatureAvailability;
         this.beginningSignature = beginningSignature;
         this.endSignature = endSignature;
+        this.typePosition = typePosition;
+        this.mainPosition = mainPosition;
+        this.inn = inn;
+        this.snils = snils;
+        this.fon = fon;
     }
 
-    public String getName() {
-        return name;
+    public Employee(Long id, String fullName, CurrentPositionFRMR currentPosition, Date beginningSignature, Date endSignature, String typePosition, boolean mainPosition, String inn, String snils, String fon) {
+        Id = id;
+        this.fullName = fullName;
+        this.currentPosition = currentPosition;
+        this.beginningSignature = beginningSignature;
+        this.endSignature = endSignature;
+        this.typePosition = typePosition;
+        this.mainPosition = mainPosition;
+        this.inn = inn;
+        this.snils = snils;
+        this.fon = fon;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public String getSurname() {
-        return surname;
+    public void setFullName(String name) {
+        this.fullName = name;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getCurrentPosition() {
+    public CurrentPositionFRMR getCurrentPosition() {
         return currentPosition;
     }
 
-    public void setCurrentPosition(String currentPosition) {
+    public void setCurrentPosition(CurrentPositionFRMR currentPosition) {
         this.currentPosition = currentPosition;
     }
 
-    public boolean isSignatureAvailability() {
-        return signatureAvailability;
+    public Long getId() {
+        return Id;
     }
 
-    public void setSignatureAvailability(boolean signatureAvailability) {
-        this.signatureAvailability = signatureAvailability;
+    public void setId(Long id) {
+        Id = id;
     }
 
-//    public GregorianCalendar getBeginningSignature() {
-//        return beginningSignature;
-//    }
-//
-//    public void setBeginningSignature(GregorianCalendar beginningSignature) {
-//        this.beginningSignature = beginningSignature;
-//    }
-//
-//    public GregorianCalendar getEndSignature() {
-//        return endSignature;
-//    }
-//
-//    public void setEndSignature(GregorianCalendar endSignature) {
-//        this.endSignature = endSignature;
-//    }
-//}
+    public Date getBeginningSignature() {
+        return beginningSignature;
+    }
+
+    public void setBeginningSignature(Date beginningSignature) {
+        this.beginningSignature = beginningSignature;
+    }
+
+    public Date getEndSignature() {
+        return endSignature;
+    }
+
+    public void setEndSignature(Date endSignature) {
+        this.endSignature = endSignature;
+    }
+
+    public String getTypePosition() {
+        return typePosition;
+    }
+
+    public void setTypePosition(String typePosition) {
+        this.typePosition = typePosition;
+    }
+
+    public String getInn() {
+        return inn;
+    }
+
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public String getSnils() {
+        return snils;
+    }
+
+    public void setSnils(String snils) {
+        this.snils = snils;
+    }
+
+    public String getFon() {
+        return fon;
+    }
+
+    public void setFon(String fon) {
+        this.fon = fon;
+    }
+
+    public boolean getMainPosition() {
+        return mainPosition;
+    }
+
+    public void setMainPosition(boolean mainPosition) {
+        this.mainPosition = mainPosition;
+    }
+
+    public String[] getObsTypePosition() {
+        String[] obsType = new String[]{"Врач", "Средний медицинский персонал", "Младший медицинский персонал", "Административно-хозяйственный персонал", "Вспомогательный персонал"};
+        return obsType;
+    }
+
+
+
 }

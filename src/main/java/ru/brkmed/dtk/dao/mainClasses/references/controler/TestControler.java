@@ -39,26 +39,26 @@ public class TestControler {
 
     }
     /* Method to CREATE an employee in the database */
-    public Long addEmployee(String name, String surname, String patronymic, String cPosition, boolean isSert, Date startDate,
-                            Date endDate) {
-            Session session =  getFactory().openSession( );
-            Transaction tx = null;
-            Long employeeID = null;
-
-            try {
-                tx = session.beginTransaction( );
-                Employee employee = new Employee(name, surname, patronymic, cPosition, isSert, startDate, endDate);
-                employeeID = (Long) session.save(employee);
-                tx.commit( );
-            } catch (HibernateException e) {
-                if (tx != null) tx.rollback( );
-                e.printStackTrace( );
-            } finally {
-                session.close( );
-            }
-            return employeeID;
-
-    }
+//    public Long addEmployee(String name, String surname, String patronymic, String cPosition, boolean isSert, Date startDate,
+//                            Date endDate, String typePosition) {
+//            Session session =  getFactory().openSession( );
+//            Transaction tx = null;
+//            Long employeeID = null;
+//
+//            try {
+//                tx = session.beginTransaction( );
+//                Employee employee = new Employee(name, surname, patronymic, cPosition, isSert, startDate, endDate, typePosition);
+//                employeeID = (Long) session.save(employee);
+//                tx.commit( );
+//            } catch (HibernateException e) {
+//                if (tx != null) tx.rollback( );
+//                e.printStackTrace( );
+//            } finally {
+//                session.close( );
+//            }
+//            return employeeID;
+//
+//    }
 
     /* Method to  READ all the employees */
     public void listEmployees( ){

@@ -1,20 +1,15 @@
-package ru.brkmed.dtk.gui.controlers;
+package ru.brkmed.dtk.gui.main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ru.brkmed.dtk.dao.mainClasses.entityes.AbstractEntity;
@@ -22,25 +17,24 @@ import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
 import ru.brkmed.dtk.gui.model.ListNodes;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ControlerGUIBuilding extends AbstractGUIControler implements Initializable {
-    ObservableList<Building> observableList = null;
-
-
-    List<Building> listIluminatedBuild = null;
-
-    static TableView<Building> getTableBuild;
-
-    static List<Button> buttonList;
-
-    static Long idBuild;
-
-    static Stage getStage;
+public class GUIBuilding extends AbstractGUIControler implements Initializable {
+//    ObservableList<Building> observableList = null;
+//
+//
+//    List<Building> listIluminatedBuild = null;
+//
+//    static TableView<Building> getTableBuild;
+//
+//    static List<Button> buttonList;
+//
+//    static Long idBuild;
+//
+//    static Stage getStage;
 
     //----------------------------------
 
@@ -50,17 +44,23 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
 
     public static Button edit;
 
+    public Button delete;
+
     private Button button;
 
     private List<Button> buttons;
 
-    public static ControlerGUIBuilding controlerGUIBuilding;
+    public static GUIBuilding GUIBuilding;
 
     public static Building buildRecord;
 
     private ObservableList<Building> obsBuild;
 
     private Stage stage;
+
+    private static TextField find;
+
+    private  SortedList<Building> sortedList;
 
 /*
 
@@ -306,7 +306,32 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+//        ObservableList<Building> observableList = FXCollections.observableArrayList();
+//        observableList.addAll(new ControlerDaoBuilding().listBuilding());
+//        FilteredList<Building> filterData = new FilteredList<>(obsBuild, b -> true);
+//        find.textProperty().addListener((observable, oldValue, newValue) -> {
+//            filterData.setPredicate(building -> {
+//                if (newValue == null || newValue.isEmpty()) {
+//                    return true;
+//                }
+//                String lowerCaseFilter = newValue.toLowerCase();
+//                if (String.valueOf(building.getId()).indexOf(lowerCaseFilter) != -1) {
+//                    return true;
+//                } else if (building.getNameBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//                    return true;
+//                } else if (building.getAdressBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            });
+//
+//
+//        });
+//        SortedList<Building> sortedData = new SortedList<>(filterData);
+//        TableView<Building> tableBuild = GUIBuilding.getTableBuilding( );
+//        sortedData.comparatorProperty().bind(tableBuild.comparatorProperty());
+//        tableBuild.setItems(sortedData);
 
     }
 
@@ -318,35 +343,31 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
         edit = super.getEditButton();
         super.getNewDialogWindow(edit,
                 "/BuildingCreateEditRecord.fxml", "Изменить здание по новому пути");
-        setButton(super.getPresButton());
+       // setButton(super.getPresButton());
+        delete = super.getDeleteButton();
+        getNewDialogWindowDelete(delete);
+
 
     }
 
-    public Button getCreate() {
-        return create;
+
+    public GUIBuilding() {
     }
 
-    public ControlerGUIBuilding() {
-    }
-
-    public ControlerGUIBuilding(List<Button> buttons, TableView<Building> tableBuilding, Stage stage) {
+    public GUIBuilding(List<Button> buttons, TableView<Building> tableBuilding, Stage stage) {
         this.buttons = buttons;
         this.tableBuilding = tableBuilding;
         this.stage = stage;
     }
 
-    public Button getEdit() {
-        return edit;
-    }
+
 
     @Override
     public ObservableList<? extends AbstractEntity> getObservableList() {
         ObservableList<Building> observableList = FXCollections.observableArrayList();
         observableList.sorted();
         List<Building> buildingList = new ControlerDaoBuilding().listBuilding();
-        for(Building build : buildingList) {
-            observableList.add(build);
-        }
+        observableList.addAll(buildingList);
         return observableList;
     }
 
@@ -360,14 +381,22 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
         nameBuilding.setPrefWidth(275.0);
         nameBuilding.setCellValueFactory(new PropertyValueFactory<Building, String>("nameBuilding"));
         TableColumn<Building, String> adressBuilding = new TableColumn<>( "Адрес здания" );
-        adressBuilding.setPrefWidth(275.0);
+        adressBuilding.setPrefWidth(675.0);
         adressBuilding.setCellValueFactory(new PropertyValueFactory<Building, String>("adressBuilding"));
         tableBuilding.getColumns( ).add(idBuilding);
         tableBuilding.getColumns( ).add(nameBuilding);
         tableBuilding.getColumns( ).add(adressBuilding);
         obsBuild = (ObservableList<Building>) getObservableList( );
-        tableBuilding.setItems(obsBuild);
+        find = super.getTxtFieldFind();
+        sortedList = (SortedList<Building>) findValueRecord(tableBuilding, obsBuild, find);
+        tableBuilding.setItems(sortedList);
+       // tableBuilding.getItems().addAll(obsBuild);
         tableBuilding.getSelectionModel( ).select(0);
+
+    }
+
+    @Override
+    public void fillValuesCreateWindow(Parent parent) {
 
     }
 
@@ -388,7 +417,7 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
         super.getStage( ).addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
             @Override
             public void handle(WindowEvent windowEvent) {
-                tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+               tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
             }
         });
     }
@@ -397,14 +426,62 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
     public AbstractGUIControler addListButton(List<Button> buttonList, Button button, Stage stage) {
         buttonList.add(button);
         tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
-        controlerGUIBuilding = new ControlerGUIBuilding( buttonList, tableBuilding, stage );
-        return controlerGUIBuilding;
+        GUIBuilding = new GUIBuilding( buttonList, tableBuilding, stage );
+        return GUIBuilding;
+    }
+
+    @Override
+    public SortedList<? extends AbstractEntity> findValueRecord(TableView<? extends AbstractEntity> tableView, ObservableList<? extends AbstractEntity> observableList, TextField txtFieldFind) {
+        FilteredList<Building> filterData = new FilteredList<>((ObservableList<Building>) observableList, b -> true);
+        txtFieldFind.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterData.setPredicate(building -> {
+                        if (newValue == null || newValue.isEmpty()) {
+                            return true;
+                        }
+                        String lowerCaseFilter = newValue.toLowerCase();
+                        if (String.valueOf(building.getId()).indexOf(lowerCaseFilter) != -1) {
+                            return true;
+                        } else if (building.getNameBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                            return true;
+                        } else if (building.getAdressBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    });
+
+
+        });
+        SortedList<Building> sortedData = new SortedList<>(filterData);
+        TableView<Building> tableBuild = (TableView<Building>) tableView;
+        sortedData.comparatorProperty().bind(tableBuild.comparatorProperty());
+        return sortedData;
+    }
+
+    @Override
+    public void resetFindTextField(ContextMenu contextMenu) {
+        MenuItem menuItem = contextMenu.getItems( ).get(0);
+        menuItem.setOnAction(actionEvent -> {
+            ObservableList<Building> observableList = FXCollections.observableArrayList();
+            List<Building> listBuilding = new ControlerDaoBuilding().listBuilding();
+            observableList.addAll(listBuilding);
+            SortedList<Building> sortedListField = (SortedList<Building>) findValueRecord(tableBuilding, observableList, getFind());
+            tableBuilding.setItems(sortedListField);
+        });
     }
 
 
-    public Button getButton() {
-        return button;
+    @Override
+    public void deleteRecord() {
+        Building building = (Building) super.getRecordTableView();
+        ControlerDaoBuilding daoBuilding = new ControlerDaoBuilding();
+        daoBuilding.deleteBuild(building.getId( ));
+        tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+
     }
+
+
+
 
     public void setButton(Button button) {
         this.button = button;
@@ -418,12 +495,17 @@ public class ControlerGUIBuilding extends AbstractGUIControler implements Initia
         return tableBuilding;
     }
 
-    public ObservableList<Building> getObsBuild() {
-        return obsBuild;
-    }
 
     @Override
     public Stage getStage() {
         return stage;
+    }
+
+    public  SortedList<Building> getSortedList() {
+        return sortedList;
+    }
+
+    public static TextField getFind() {
+        return find;
     }
 }

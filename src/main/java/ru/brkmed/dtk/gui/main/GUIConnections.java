@@ -1,61 +1,355 @@
-package ru.brkmed.dtk.gui.controlers;
+package ru.brkmed.dtk.gui.main;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import ru.brkmed.dtk.dao.mainClasses.entityes.AbstractEntity;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
 import ru.brkmed.dtk.gui.model.ListNodes;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.regex.Pattern;
 
-public class ControlerGUIConnections implements Initializable {
-    ObservableList<Connection> observableList = null;
-
-
-    List<Connection> listIluminatedConnection = null;
-
-    static TableView<Connection> getTableConnections;
-
-    static List<Button> buttonList;
-
-    static Long idConnect;
-
-    static Stage getStage;
-
-    static Map<Long, Building> mapChcBoxBuild;
+public class GUIConnections extends AbstractGUIControler {
+//    ObservableList<Connection> observableList = null;
+//
+//    List<Connection> listIluminatedConnection = null;
+//
+//    static TableView<Connection> getTableConnections;
+//
+//    private List<Button> buttonList;
+//
+//    private Long idConnect;
 
 
+    private static Map<Long, Building> mapChcBoxBuild;
 
-    public void createAddTab(TabPane tabPane) {
+    //____________________________________
+
+    private TableView<Connection> tableConnection;
+
+    private ObservableList<Connection> obsConnection;
+
+    private static Connection connectRecord;
+
+    private static GUIConnections GUIConnections;
+
+    public final Connection connection = new Connection( );
+
+    private List<Button> buttons;
+
+    private Stage stage;
+
+
+    public GUIConnections() {
+    }
+
+    public GUIConnections(List<Button> buttons, TableView<Connection> tableConnection, Stage stage) {
+        this.buttons = buttons;
+        this.tableConnection = tableConnection;
+        this.stage = stage;
+    }
+
+
+    @Override
+    public ObservableList<? extends AbstractEntity> getObservableList() {
+        ObservableList<Connection> observableList = FXCollections.observableArrayList( );
+        observableList.sorted( );
+        List<Connection> connectionList = new ControlerDaoConnection( ).listConnections( );
+        observableList.addAll(connectionList);
+        return observableList;
+    }
+
+    @Override
+    public void setValueTableView(TableView<? extends AbstractEntity> tableView) {
+        tableConnection = (TableView<Connection>) super.getTableView( );
+        TableColumn<Connection, Long> idConnect = new TableColumn<>("ID Подключения");
+        idConnect.setPrefWidth(45.0);
+        idConnect.setCellValueFactory(new PropertyValueFactory<Connection, Long>("Id"));
+        TableColumn<Connection, String> nameConnect = new TableColumn<>("Имя подключения");
+        nameConnect.setPrefWidth(275.0);
+        nameConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("nameConnection"));
+        TableColumn<Connection, String> nameBuilding = new TableColumn<>("Здание");
+        nameBuilding.setPrefWidth(275.0);
+        nameBuilding.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, String>, ObservableValue<String>>( ) {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Connection, String> connectionBuildString) {
+                return new ReadOnlyObjectWrapper<>(connectionBuildString.getValue( ).getBuild( ).getNameBuilding( ));
+            }
+        });
+        // nameBuilding.setCellValueFactory(new PropertyValueFactory<Connection, Building>("build.nameBuilding"));
+        TableColumn<Connection, String> connectDate = new TableColumn<>("Дата подключения");
+        connectDate.setPrefWidth(275.0);
+        connectDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, String>, ObservableValue<String>>( ) {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Connection, String> connectionStringCellDataFeatures) {
+                String input = String.valueOf(connectionStringCellDataFeatures.getValue( ).getDateConnection( ));
+                return new ReadOnlyObjectWrapper<>(getStringDate(input));
+            }
+        });
+        //connectDate.setCellValueFactory(new PropertyValueFactory<Connection, Date>("dateConnection"));
+        TableColumn<Connection, String> suplierConnect = new TableColumn<>("Провайдер");
+        suplierConnect.setPrefWidth(275.0);
+        suplierConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("suplier"));
+        TableColumn<Connection, String> typeConnect = new TableColumn<>("Тип подключения");
+        typeConnect.setPrefWidth(275.0);
+        typeConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("typeConnection"));
+        TableColumn<Connection, Double> speedConnect = new TableColumn<>("Скорость Мб/с");
+        speedConnect.setPrefWidth(275.0);
+        speedConnect.setCellValueFactory(new PropertyValueFactory<Connection, Double>("speedConnection"));
+        TableColumn<Connection, Double> taxConnect = new TableColumn<>("Абонентская плата");
+        taxConnect.setPrefWidth(275.0);
+        taxConnect.setCellValueFactory(new PropertyValueFactory<Connection, Double>("tax"));
+        TableColumn<Connection, Double> taxStartConnect = new TableColumn<>("Стоимость подключения");
+        taxStartConnect.setPrefWidth(275.0);
+        taxStartConnect.setCellValueFactory(new PropertyValueFactory<Connection, Double>("startTax"));
+        TableColumn<Connection, String> typeTaxConnect = new TableColumn<>("Тип оплаты");
+        typeTaxConnect.setPrefWidth(275.0);
+        typeTaxConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("typeTax"));
+
+        tableConnection.getColumns( ).addAll(idConnect, nameConnect, nameBuilding, connectDate, suplierConnect,
+                typeConnect, speedConnect, taxConnect, taxStartConnect, typeTaxConnect);
+
+        obsConnection = (ObservableList<Connection>) getObservableList( );
+        TextField find = super.getTxtFieldFind( );
+        SortedList<Connection> sortedList = (SortedList<Connection>) findValueRecord(tableConnection, obsConnection, find);
+        tableConnection.setItems(sortedList);
+        tableConnection.getSelectionModel( ).select(0);
+
+    }
+
+    @Override
+    public void fillValuesCreateWindow(Parent parent) {
+        ArrayList<Node> listNodes = ListNodes.getAllNodes(parent);
+        ChoiceBox<String> choiceBoxBuild = (ChoiceBox<String>) listNodes.get(4);
+        choiceBoxBuild.getItems( ).addAll(getObsBuildConnect( ));
+        DatePicker datePicker = (DatePicker) listNodes.get(8);
+        // setDataDatePicker(datePicker);
+        // choiceBoxBuild.setValue("Выберите здание");
+        ChoiceBox<String> choiceBoxTypeConnect = (ChoiceBox<String>) listNodes.get(12);
+        choiceBoxTypeConnect.getItems( ).addAll(connection.getObsTypeConnect( ));
+        // choiceBoxTypeConnect.setValue("Выберите тип подключения");
+        ChoiceBox<String> choiceBoxTypeTax = (ChoiceBox<String>) listNodes.get(21);
+        choiceBoxTypeTax.getItems( ).addAll(connection.getObsTypeTax( ));
+        TextField speedConnect = (TextField) listNodes.get(14);
+        getDoubleValue(speedConnect);
+        TextField tax = (TextField) listNodes.get(17);
+        getDoubleValue(tax);
+        TextField taxStart = (TextField) listNodes.get(18);
+        getDoubleValue(taxStart);
+    }
+
+    @Override
+    public void fillValuesEditWindow(Parent parent) {
+        ArrayList<Node> listNodes = ListNodes.getAllNodes(parent);
+        TextField nameConnection = (TextField) listNodes.get(3);
+        ChoiceBox<String> buildConnect = (ChoiceBox<String>) listNodes.get(4);
+        Button saveOrEdit = (Button) listNodes.get(6);
+        DatePicker datePicker = (DatePicker) listNodes.get(8);
+        TextField suplierConnection = (TextField) listNodes.get(10);
+        ChoiceBox<String> typeConnection = (ChoiceBox<String>) listNodes.get(12);
+        TextField speedConnection = (TextField) listNodes.get(14);
+        TextField tax = (TextField) listNodes.get(17);
+        TextField connectionTax = (TextField) listNodes.get(18);
+        ChoiceBox<String> typeTaxConnection = (ChoiceBox<String>) listNodes.get(21);
+
+        connectRecord = (Connection) super.getRecordTableView( );
+        nameConnection.setText(connectRecord.getNameConnection( ));
+        buildConnect.setValue(connectRecord.getBuild( ).getNameBuilding( ));
+        buildConnect.getItems( ).addAll(getObsBuildConnect( ));
+        Instant instant = connectRecord.getDateConnection( ).toInstant( );
+        datePicker.setValue(instant.atZone(ZoneId.systemDefault( )).toLocalDate( ));
+        datePicker.getEditor( ).setDisable(true);
+        datePicker.getEditor( ).setOpacity(1);
+        // setDataDatePicker(datePicker.getEditor());
+        suplierConnection.setText(connectRecord.getSuplier( ));
+        typeConnection.setValue(connectRecord.getTypeConnection( ));
+        typeConnection.getItems( ).addAll(connection.getObsTypeConnect( ));
+        speedConnection.setText(String.valueOf(connectRecord.getSpeedConnection( )));
+        speedConnection.textProperty( ).addListener((observable, oldvalue, newvalue) -> {
+
+            getDoubleValue(speedConnection);
+        });
+        tax.setText(String.valueOf(connectRecord.getTax( )));
+        tax.textProperty( ).addListener((observable, oldvalue, newvalue) -> {
+            getDoubleValue(tax);
+        });
+        connectionTax.setText(String.valueOf(connectRecord.getStartTax( )));
+        connectionTax.textProperty( ).addListener((observable, oldvalue, newvalue) -> {
+            getDoubleValue(connectionTax);
+        });
+        typeTaxConnection.setValue(connectRecord.getTypeTax( ));
+        typeTaxConnection.getItems( ).addAll(connection.getObsTypeTax( ));
+
+//            getStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
+//                @Override
+//                public void handle(WindowEvent windowEvent) {
+//
+//                    observableList = getObsConnection();
+//                    listConnections.setItems(observableList);
+//
+//                }
+//            });
+
+
+    }
+
+    @Override
+    public void addEventStage() {
+        super.getStage( ).addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                tableConnection.setItems((ObservableList<Connection>) getObservableList( ));
+            }
+        });
+
+    }
+
+    @Override
+    public AbstractGUIControler addListButton(List<Button> buttonList, Button button, Stage stage) {
+        buttonList.add(button);
+        tableConnection.setItems((ObservableList<Connection>) getObservableList( ));
+        GUIConnections = new GUIConnections(buttonList, tableConnection, stage);
+        return GUIConnections;
+
+    }
+
+    @Override
+    public SortedList<? extends AbstractEntity> findValueRecord(TableView<? extends AbstractEntity> tableView, ObservableList<? extends AbstractEntity> observableList, TextField txtFieldFind) {
+        FilteredList<Connection> filterData = new FilteredList<>((ObservableList<Connection>) observableList, b -> true);
+        txtFieldFind.textProperty( ).addListener((observable, oldValue, newValue) -> {
+            filterData.setPredicate(connection -> {
+                if (newValue == null || newValue.isEmpty( )) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase( );
+                if (String.valueOf(connection.getId( )).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (connection.getNameConnection( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (connection.getBuild( ).getNameBuilding( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if ((getStringDate(String.valueOf(connection.getDateConnection( ))).toLowerCase( ).indexOf(lowerCaseFilter) != -1)) {
+                    return true;
+                } else if (connection.getSuplier( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (connection.getTypeConnection( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (String.valueOf(connection.getSpeedConnection( )).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (String.valueOf(connection.getTax( )).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (String.valueOf(connection.getStartTax( )).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (connection.getTypeTax( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+
+        });
+        SortedList<Connection> sortedData = new SortedList<>(filterData);
+        TableView<Connection> tableConnection = (TableView<Connection>) tableView;
+        sortedData.comparatorProperty( ).bind(tableConnection.comparatorProperty( ));
+        return sortedData;
+    }
+
+    @Override
+    public void resetFindTextField(ContextMenu contextMenu) {
+        MenuItem menuItem = contextMenu.getItems( ).get(0);
+        menuItem.setOnAction(actionEvent -> {
+            ObservableList<Connection> observableList = FXCollections.observableArrayList();
+            List<Connection> listConnections = new ControlerDaoConnection().listConnections();
+            observableList.addAll(listConnections);
+            SortedList<Connection> sortedListField = (SortedList<Connection>) findValueRecord(tableConnection, observableList, getTxtFieldFind());
+            tableConnection.setItems(sortedListField);
+        });
+    }
+
+    @Override
+    public void deleteRecord() {
+        Connection connect = (Connection) super.getRecordTableView( );
+        ControlerDaoConnection controlerDaoConnection = new ControlerDaoConnection( );
+        controlerDaoConnection.deleteConnection(connect.getId( ));
+        tableConnection.setItems((ObservableList<Connection>) getObservableList( ));
+    }
+
+
+
+
+    public void alternativeTab(TabPane tabPane) {
+        super.basicWindowTab(tabPane, "Новый путь подключений");
+        Button create = super.getCreateButton( );
+        super.getNewDialogWindow(create,
+                "/ConnectionsCreateEditRecord.fxml", "Создать подключение по новому пути");
+        Button edit = super.getEditButton( );
+        super.getNewDialogWindow(edit,
+                "/ConnectionsCreateEditRecord.fxml", "Изменить подключение по новому пути");
+        // setButton(super.getPresButton());
+        Button delete = super.getDeleteButton( );
+        getNewDialogWindowDelete(delete);
+
+
+    }
+
+    public ObservableList<String> getObsBuildConnect() {
+        AbstractGUIControler absGUI = new GUIBuilding( );
+        ObservableList<Building> obsBuild = (ObservableList<Building>) absGUI.getObservableList( );
+        mapChcBoxBuild = new HashMap<>( );
+        List<String> listNameBuild = new ArrayList<>( );
+        ObservableList<String> obsListNameBuild = FXCollections.observableArrayList( );
+        for (Building build : obsBuild) {
+            mapChcBoxBuild.put(build.getId( ), build);
+            listNameBuild.add(build.getNameBuilding( ));
+        }
+        obsListNameBuild.addAll(listNameBuild);
+        return obsListNameBuild;
+    }
+
+    public static GUIConnections getControlerGUIConnections() {
+        return GUIConnections;
+    }
+
+
+    public List<Button> getButtonList() {
+        return buttons;
+    }
+
+    @Override
+    public Stage getStage() {
+        return stage;
+    }
+
+    public static Connection getConnectRecord() {
+        return connectRecord;
+    }
+
+    public TableView<Connection> getTableConnection() {
+        return tableConnection;
+    }
+
+    public static Map<Long, Building> getMapChcBoxBuild() {
+        return mapChcBoxBuild;
+    }
+
+    /*  public void createAddTab(TabPane tabPane) {
         Tab connectionTab = new Tab( "Подключения" );
         connectionTab.setClosable(true);
         AnchorPane externAnchorPane = new AnchorPane();
@@ -589,7 +883,7 @@ public class ControlerGUIConnections implements Initializable {
     public void setClearTextField(TextField textField) {
        // if(textField.get)
     }
-
+*/
 
 }
 

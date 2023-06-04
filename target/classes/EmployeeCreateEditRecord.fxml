@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="291.0" prefWidth="666.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.brkmed.dtk.gui.controlers.ControlerEmployeesCreateEditRecord">
+   <children>
+      <TextField fx:id="txtFieldFIO" layoutX="86.0" layoutY="19.0" prefHeight="25.0" prefWidth="552.0" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="29.0" />
+      <Label layoutX="11.0" layoutY="20.0" prefHeight="25.0" prefWidth="55.0" text="  ФИО" textAlignment="CENTER" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="20.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Label layoutX="6.0" layoutY="203.0" prefHeight="25.0" prefWidth="32.0" text="ИНН" textAlignment="CENTER" AnchorPane.leftAnchor="6.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtFieldInn" layoutX="42.0" layoutY="201.0" prefHeight="25.0" prefWidth="150.0" AnchorPane.topAnchor="201.0" />
+      <Label layoutX="392.0" layoutY="203.0" prefHeight="25.0" prefWidth="119.0" text="Мобильный телефон" textAlignment="CENTER" />
+      <TextField fx:id="txtFieldPhone" layoutX="514.0" layoutY="203.0" prefHeight="25.0" prefWidth="141.0" AnchorPane.topAnchor="203.0" />
+      <Label layoutX="10.0" layoutY="59.0" prefHeight="25.0" prefWidth="78.0" text="Должность" textAlignment="CENTER" AnchorPane.leftAnchor="10.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="chcBoxCurPosition" layoutX="84.0" layoutY="59.0" prefHeight="25.0" prefWidth="552.0" AnchorPane.leftAnchor="84.0" AnchorPane.rightAnchor="31.0" />
+      <Label layoutX="12.0" layoutY="159.0" prefHeight="25.0" prefWidth="94.0" text="Тип должности" textAlignment="CENTER" AnchorPane.leftAnchor="12.0">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="chcBoxTypePosition" layoutX="107.0" layoutY="157.0" prefHeight="25.0" prefWidth="329.0" AnchorPane.leftAnchor="107.0" AnchorPane.topAnchor="157.0" />
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
+      <Separator layoutY="94.0" prefHeight="4.0" prefWidth="667.0" />
+      <Label layoutX="125.0" layoutY="112.0" prefHeight="25.0" prefWidth="67.0" text="Начало" textAlignment="CENTER" />
+      <DatePicker fx:id="dpStartCert" layoutX="192.0" layoutY="111.0" AnchorPane.topAnchor="111.0" />
+      <Label layoutX="384.0" layoutY="113.0" prefHeight="25.0" prefWidth="78.0" text="Окончание" textAlignment="CENTER" />
+      <DatePicker fx:id="dpEndCert" layoutX="463.0" layoutY="113.0" AnchorPane.topAnchor="113.0" />
+      <Label layoutX="202.0" layoutY="203.0" prefHeight="25.0" prefWidth="49.0" text="СНИЛС" textAlignment="CENTER">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtFieldSNILS" layoutX="251.0" layoutY="202.0" prefHeight="25.0" prefWidth="135.0" AnchorPane.leftAnchor="251.0" AnchorPane.topAnchor="202.0" />
+      <Button fx:id="btnSaveEdit" layoutX="297.0" layoutY="239.0" mnemonicParsing="false" onAction="#saveEditEmployee" prefHeight="32.0" prefWidth="94.0" text="Сохранить" AnchorPane.leftAnchor="297.0" AnchorPane.topAnchor="239.0" />
+      <Label layoutX="12.0" layoutY="111.0" prefHeight="17.0" prefWidth="85.0" text="Сертификат">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
+      <Separator layoutX="-4.0" layoutY="147.0" prefHeight="4.0" prefWidth="667.0" />
+      <CheckBox fx:id="chkMainCurrent" layoutX="478.0" layoutY="163.0" mnemonicParsing="false" text="Основная должность">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </CheckBox>
+      <Separator layoutY="190.0" prefHeight="4.0" prefWidth="667.0" />
+   </children>
+</AnchorPane>

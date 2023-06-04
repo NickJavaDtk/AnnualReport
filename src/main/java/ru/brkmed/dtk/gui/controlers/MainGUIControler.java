@@ -2,11 +2,11 @@ package ru.brkmed.dtk.gui.controlers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
+import ru.brkmed.dtk.gui.main.GUIBuilding;
+import ru.brkmed.dtk.gui.main.GUIConnections;
+import ru.brkmed.dtk.gui.main.GUICurrentPositionFRMR;
+import ru.brkmed.dtk.gui.main.GUIEmployee;
 
 public class MainGUIControler {
     @FXML
@@ -31,6 +31,9 @@ public class MainGUIControler {
     private MenuItem menuItemEmploee;
 
     @FXML
+    private MenuItem menuItemNCI;
+
+    @FXML
     private MenuItem menuItemPM;
 
     @FXML
@@ -44,7 +47,7 @@ public class MainGUIControler {
 
     @FXML
     void createBuilding(ActionEvent event) {
-        ControlerGUIBuilding guiBuilding = new ControlerGUIBuilding();
+        GUIBuilding guiBuilding = new GUIBuilding();
         //guiBuilding.createAddTab(mainTabPane);
        // ControlerGUIBuilding gdd = new AbstractGUIControler(  )
         guiBuilding.alternativeTab(mainTabPane);
@@ -53,12 +56,24 @@ public class MainGUIControler {
     }
 
     public void createConnections(ActionEvent actionEvent) {
-        ControlerGUIConnections guiConnections = new ControlerGUIConnections();
-        guiConnections.createAddTab(mainTabPane);
+        GUIConnections guiConnections = new GUIConnections();
+       // guiConnections.createAddTab(mainTabPane);
+        guiConnections.alternativeTab(mainTabPane);
     }
 
     @FXML
     void createEmploee(ActionEvent event) {
+        GUIEmployee guiEmployee = new GUIEmployee(  );
+        guiEmployee.alternativeTab(mainTabPane);
+
+    }
+
+    @FXML
+    void createNCI(ActionEvent event) {
+//        ControlerLoadPositionFRMR controler = new ControlerLoadPositionFRMR();
+//        controler.startLoadWindow();
+        GUICurrentPositionFRMR current = new GUICurrentPositionFRMR();
+        current.alternativeTab(mainTabPane);
 
     }
 
