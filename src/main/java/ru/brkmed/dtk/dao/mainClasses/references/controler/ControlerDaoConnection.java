@@ -43,8 +43,6 @@ public class ControlerDaoConnection {
                 Long id = Long.parseLong(String.valueOf(obj[0]));
                 String nameConnect = String.valueOf(obj[1]);
                 Building buildConnect = (Building)(obj[2]);
-                String s = String.valueOf(obj[3]);
-                Date d = new SimpleDateFormat("yyyy-MM-dd").parse(s);
                 Date dateConnect = formatDate.parse(String.valueOf(obj[3]));
                 String suplierConnect = String.valueOf(obj[4]);
                 String typeConnect = String.valueOf(obj[5]);
@@ -112,7 +110,7 @@ public class ControlerDaoConnection {
     }
 
     public void deleteConnection(Long Id){
-        Session session = ControlerDaoBuilding.getFactory().openSession();
+        Session session = ControlerDaoConnection.getFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();

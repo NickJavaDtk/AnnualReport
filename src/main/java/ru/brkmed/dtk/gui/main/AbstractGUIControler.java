@@ -118,7 +118,7 @@ public abstract class AbstractGUIControler {
         //innerAnchorPane.setTopAnchor(txtFieldFind, 12.0);
         //innerAnchorPane.setRightAnchor(txtFieldFind, 0.0);
         //updateTableView = getUpdateDataTableView(MainWindow.getMainStage());
-        Group groupInnerPane = new Group( createButton, editButton, deleteButton, updateTableView, findRecord, txtFieldFind);
+        Group groupInnerPane = new Group( createButton, editButton, deleteButton, findRecord, txtFieldFind);
         if (this.getClass().getCanonicalName( ).equals("ru.brkmed.dtk.gui.main.GUIEmployee")) {
             loadButton = addAnchorPane(textLoadButton, innerAnchorPane);
             loadButton.setLayoutX(236.0);
@@ -279,7 +279,7 @@ public abstract class AbstractGUIControler {
         tableView.prefWidth(721.0);
         tableView.setMaxHeight(Region.USE_COMPUTED_SIZE);
         tableView.setMaxWidth(Region.USE_COMPUTED_SIZE);
-        tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
+       // tableView.setColumnResizePolicy(TableView.UNCONSTRAINED_RESIZE_POLICY);
         externAnchorPane.setLeftAnchor(tableView, 0.0);
         externAnchorPane.setRightAnchor(tableView, 0.0);
         externAnchorPane.setTopAnchor(tableView, 46.0);
@@ -421,11 +421,18 @@ public abstract class AbstractGUIControler {
     }
 
     public  AbstractEntity getRecordTableView() {
-        TableView<? extends AbstractEntity> tableAbs = getTableView();
-        TablePosition<? extends AbstractEntity, Long> tpAbs = tableAbs.getSelectionModel().getSelectedCells( ).get(0);
-        int rowID = tpAbs.getRow();
-        AbstractEntity abstractEntity = tableAbs.getItems().get(rowID);
-        id = abstractEntity.getId( );
+        AbstractEntity abstractEntity = null;
+        try {
+            TableView<? extends AbstractEntity> tableAbs = getTableView( );
+            TablePosition<? extends AbstractEntity, Long> tpAbs = tableAbs.getSelectionModel( ).getSelectedCells( ).get(0);
+            int rowID = tpAbs.getRow( );
+            abstractEntity = tableAbs.getItems( ).get(rowID);
+            id = abstractEntity.getId( );
+            return abstractEntity;
+        } catch (IndexOutOfBoundsException e) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Для редактирования необходимо выделить запись");
+            alert.showAndWait();
+        }
         return abstractEntity;
     }
 

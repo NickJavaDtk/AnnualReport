@@ -24,12 +24,15 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
+        <property name="hibernate.enable_lazy_load_no_trans">true</property>
 
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Employee"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Unit"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Building"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Connection"/>
         <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.CurrentPositionFRMR"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Department"/>
+        <mapping class="ru.brkmed.dtk.dao.mainClasses.entityes.Device"/>
 
     </session-factory>
 </hibernate-configuration>

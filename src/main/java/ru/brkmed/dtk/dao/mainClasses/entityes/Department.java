@@ -6,71 +6,117 @@ import ru.brkmed.dtk.dao.mainClasses.references.TypeActivity;
 import ru.brkmed.dtk.dao.mainClasses.references.TypeDivision;
 import ru.brkmed.dtk.dao.mainClasses.references.TypeLocality;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public  class Department {
-    private String nameDivision;
-    protected TypeDivision typeDivision;
-    protected TypeActivity typeActivity;
-    protected TypeLocality typeLocality;
+@Entity
+public  class Department extends AbstractEntity {
 
-    protected ConnectionARM connectionARM;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
+    @Column(nullable = false, name = "name")
+    private String nameDepartment;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Building building;
+    @Column(nullable = false, name = "help")
+    private String typeHelp;
+    @Column(nullable = false, name = "task")
+    private String typeTask;
+    private boolean rural;
+    private boolean fap;
+    private boolean statist;
 
-    protected ConnectionSpeed connectionSpeed;
+    @OneToMany(mappedBy = "department")
+    public Collection<Unit> departments = new ArrayList<>(  );
 
-    public Department(String nameDivision, TypeDivision typeDivision, TypeActivity typeActivity, TypeLocality typeLocality, ConnectionARM connectionARM, ConnectionSpeed connectionSpeed) {
-        this.nameDivision = nameDivision;
-        this.typeDivision = typeDivision;
-        this.typeActivity = typeActivity;
-        this.typeLocality = typeLocality;
-        this.connectionARM = connectionARM;
-        this.connectionSpeed = connectionSpeed;
+    public Department() {
     }
 
-    public String getNameDivision() {
-        return nameDivision;
+    public Department(Long id, String nameDepartment, Building building, String typeHelp, String typeTask, boolean rural, boolean fap, boolean statist) {
+        Id = id;
+        this.nameDepartment = nameDepartment;
+        this.building = building;
+        this.typeHelp = typeHelp;
+        this.typeTask = typeTask;
+        this.rural = rural;
+        this.fap = fap;
+        this.statist = statist;
     }
 
-    public void setNameDivision(String nameDivision) {
-        this.nameDivision = nameDivision;
+    public Department(String nameDepartment, Building building, String typeHelp, String typeTask, boolean rural, boolean fap, boolean statist) {
+        this.nameDepartment = nameDepartment;
+        this.building = building;
+        this.typeHelp = typeHelp;
+        this.typeTask = typeTask;
+        this.rural = rural;
+        this.fap = fap;
+        this.statist = statist;
     }
 
-    public TypeDivision getTypeDivision() {
-        return typeDivision;
+    public Long getId() {
+        return Id;
     }
 
-    public void setTypeDivision(TypeDivision typeDivision) {
-        this.typeDivision = typeDivision;
+    public void setId(Long id) {
+        Id = id;
     }
 
-    public TypeActivity getTypeActivity() {
-        return typeActivity;
+    public String getNameDepartment() {
+        return nameDepartment;
     }
 
-    public void setTypeActivity(TypeActivity typeActivity) {
-        this.typeActivity = typeActivity;
+    public void setNameDepartment(String nameDepartment) {
+        this.nameDepartment = nameDepartment;
     }
 
-    public TypeLocality getTypeLocality() {
-        return typeLocality;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setTypeLocality(TypeLocality typeLocality) {
-        this.typeLocality = typeLocality;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
-    public ConnectionARM getConnectionARM() {
-        return connectionARM;
+    public String getTypeHelp() {
+        return typeHelp;
     }
 
-    public void setConnectionARM(ConnectionARM connectionARM) {
-        this.connectionARM = connectionARM;
+    public void setTypeHelp(String typeHelp) {
+        this.typeHelp = typeHelp;
     }
 
-    public ConnectionSpeed getConnectionSpeed() {
-        return connectionSpeed;
+    public String getTypeTask() {
+        return typeTask;
     }
 
-    public void setConnectionSpeed(ConnectionSpeed connectionSpeed) {
-        this.connectionSpeed = connectionSpeed;
+    public void setTypeTask(String typeTask) {
+        this.typeTask = typeTask;
+    }
+
+    public boolean isRural() {
+        return rural;
+    }
+
+    public void setRural(boolean rural) {
+        this.rural = rural;
+    }
+
+    public boolean isFap() {
+        return fap;
+    }
+
+    public void setFap(boolean fap) {
+        this.fap = fap;
+    }
+
+    public boolean isStatist() {
+        return statist;
+    }
+
+    public void setStatist(boolean statist) {
+        this.statist = statist;
     }
 }

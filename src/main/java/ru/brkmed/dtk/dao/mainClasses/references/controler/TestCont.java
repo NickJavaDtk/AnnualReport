@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Unit;
 
+/*
 public class TestCont {
     private static SessionFactory factory;
 
@@ -64,3 +65,4 @@ public class TestCont {
         }
     }
 }
+*/

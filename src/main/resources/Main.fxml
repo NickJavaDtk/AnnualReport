@@ -41,13 +41,12 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="561.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.brkmed.dtk.gui.controlers.MainGUIControler">
+<VBox prefHeight="561.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.brkmed.dtk.gui.main.MainGUIControler">
   <children>
     <MenuBar prefHeight="25.0" prefWidth="747.0" VBox.vgrow="NEVER">
       <menus>
@@ -72,10 +71,9 @@
                   <MenuItem fx:id="menuItemBuilding" mnemonicParsing="false" onAction="#createBuilding" text="Здания" />
                   <MenuItem fx:id="menuItemConnections" mnemonicParsing="false" onAction="#createConnections" text="Подключения" />
             <MenuItem fx:id="menuItemEmploee" mnemonicParsing="false" onAction="#createEmploee" text="Сотрудники" />
-              <MenuItem fx:id="menuItemNCI" mnemonicParsing="false" onAction="#createNCI" text="Загрузка НСИ" />
+              <MenuItem fx:id="menuItemNCI" mnemonicParsing="false" onAction="#createNCI" text="НСИ" />
                   <MenuItem fx:id="menuItemUnit" mnemonicParsing="false" onAction="#createUnit" text="Подразделения" />
-            <MenuItem fx:id="menuItemPM" mnemonicParsing="false" onAction="#createPM" text="Рабочие места" />
-            <MenuItem fx:id="menuItemPrinter" mnemonicParsing="false" onAction="#createPrinter" text="Принтера и МФУ" />
+            <MenuItem fx:id="menuItemEquip" mnemonicParsing="false" onAction="#createEquip" text="Оборудование" />
           </items>
         </Menu>
         <Menu mnemonicParsing="false" text="Help">
@@ -95,17 +93,17 @@
                            <children>
                               <AnchorPane layoutX="6.0" prefHeight="44.0" prefWidth="716.0" AnchorPane.bottomAnchor="461.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="2.0">
                                  <children>
-                                    <Button fx:id="createCabinet" layoutY="2.0" mnemonicParsing="false" text="Создать" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
+                                    <Button fx:id="createCabinet" layoutY="2.0" mnemonicParsing="false" onAction="#btnCreate" text="Создать" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="2.0">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </Button>
-                                    <Button fx:id="editCabinet" layoutX="71.0" layoutY="2.0" mnemonicParsing="false" text="Изменить" AnchorPane.topAnchor="2.0">
+                                    <Button fx:id="editCabinet" layoutX="71.0" layoutY="2.0" mnemonicParsing="false" onAction="#btnEdit" text="Изменить" AnchorPane.topAnchor="2.0">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </Button>
-                                    <Button fx:id="loadCabinet" layoutX="151.0" layoutY="2.0" mnemonicParsing="false" text="Загрузить" AnchorPane.topAnchor="2.0">
+                                    <Button fx:id="deleteCabinet" layoutX="151.0" layoutY="2.0" mnemonicParsing="false" onAction="#btnDelete" text="Удалить" AnchorPane.topAnchor="2.0">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
@@ -114,14 +112,9 @@
                                     <TextField layoutX="567.0" layoutY="12.0" prefHeight="25.0" prefWidth="149.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="12.0" />
                                  </children>
                               </AnchorPane>
-                              <TableView layoutX="2.0" layoutY="46.0" prefHeight="443.0" prefWidth="721.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="46.0">
-                                <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
-                                </columns>
-                              </TableView>
+                              <TableView fx:id="tblViewUnit" layoutX="2.0" layoutY="46.0" prefHeight="443.0" prefWidth="721.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="24.0" AnchorPane.topAnchor="46.0" />
                               <Label layoutX="14.0" layoutY="485.0" text="Количество записей" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" />
-                              <Label layoutX="138.0" layoutY="485.0" text="Label" AnchorPane.bottomAnchor="5.0" />
+                              <Label fx:id="lblCountRecord" layoutX="138.0" layoutY="485.0" text="Label" AnchorPane.bottomAnchor="5.0" />
                            </children>
                         </AnchorPane>
                   </content>

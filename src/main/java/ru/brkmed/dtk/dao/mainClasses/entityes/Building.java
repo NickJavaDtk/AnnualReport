@@ -20,6 +20,8 @@ public class Building extends AbstractEntity implements Serializable {
     protected Unit unit;
     @OneToMany(mappedBy = "build")
     public Collection<Connection> listConnection = new ArrayList<>(  );
+    @OneToMany(mappedBy = "building")
+    public Collection<Department> listDepartment = new ArrayList<>(  );
 
     public Building() {
 

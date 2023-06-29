@@ -91,7 +91,7 @@ public class GUIEmployee extends AbstractGUIControler{
         });
         // nameBuilding.setCellValueFactory(new PropertyValueFactory<Connection, Building>("build.nameBuilding"));
         TableColumn<Employee, String> startDate = new TableColumn<>( "Начало сертификата" );
-        startDate.setPrefWidth(475.0);
+        startDate.setPrefWidth(175.0);
         startDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Employee, String>, ObservableValue<String>>( ) {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Employee, String> employeeSDate) {
@@ -100,7 +100,7 @@ public class GUIEmployee extends AbstractGUIControler{
             }
         });
         TableColumn<Employee, String> endDate = new TableColumn<>( "Окончание сертификата" );
-        endDate.setPrefWidth(475.0);
+        endDate.setPrefWidth(175.0);
         endDate.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Employee, String>, ObservableValue<String>>( ) {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Employee, String> employeeEDate) {
@@ -109,7 +109,7 @@ public class GUIEmployee extends AbstractGUIControler{
             }
         });
         TableColumn<Employee, String> typeEmployee = new TableColumn<>("Категория персонала");
-        typeEmployee.setPrefWidth(875.0);
+        typeEmployee.setPrefWidth(475.0);
         typeEmployee.setCellValueFactory(new PropertyValueFactory<Employee, String>("typePosition"));
         TableColumn<Employee, Boolean> mainCurrent = new TableColumn<>( "Основная должность");
         mainCurrent.setPrefWidth(275);

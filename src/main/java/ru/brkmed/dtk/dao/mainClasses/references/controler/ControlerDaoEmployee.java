@@ -38,7 +38,7 @@ public class ControlerDaoEmployee {
         try {
             tx = session.beginTransaction();
             List  employeeTmp =  session.createQuery("select e.id, e.fullName, e.currentPosition, e.beginningSignature," +
-                    "e.endSignature, e.typePosition, e.mainPosition, e.inn, e.snils, e.fon FROM Employee e").list();
+                    "e.endSignature, e.typePosition, e.mainPosition, e.inn, e.snils, e.fon FROM Employee e" ).setMaxResults(5) .list();
             for (Iterator iterator = employeeTmp.iterator(); iterator.hasNext();){
                 Object[] obj = (Object[])iterator.next();
                 Long id = Long.parseLong(String.valueOf(obj[0]));
@@ -49,7 +49,7 @@ public class ControlerDaoEmployee {
                 String eDate = String.valueOf(obj[4]);
                 Date endDate = formatDate.parse(eDate);
                 String typePosition = String.valueOf(obj[5]);
-                boolean mainPosition = Boolean.valueOf(String.valueOf(obj[6]));
+                Boolean mainPosition = Boolean.valueOf(String.valueOf(obj[6]));
                 String inn = String.valueOf(obj[7]);
                 String snils = String.valueOf(obj[8]);
                 String fon = String.valueOf(obj[9]);

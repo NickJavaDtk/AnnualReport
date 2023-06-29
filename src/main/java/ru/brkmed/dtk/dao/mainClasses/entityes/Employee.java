@@ -1,8 +1,10 @@
 package ru.brkmed.dtk.dao.mainClasses.entityes;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
 
 import com.sun.istack.NotNull;
@@ -28,6 +30,13 @@ public class Employee extends AbstractEntity implements Serializable {
     private String typePosition;
     @Column (name = "is_main")
     private boolean mainPosition;
+   // @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "unit_employee",
+            joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "Id"),
+            inverseJoinColumns = @JoinColumn(name = "unit_id", referencedColumnName = "Id"))
+    private List<Unit> unitListEmployee = new ArrayList<Unit>();
+
     
     private String inn;    
    
@@ -147,11 +156,55 @@ public class Employee extends AbstractEntity implements Serializable {
         this.mainPosition = mainPosition;
     }
 
+    public List<Unit> getUnitListEmployee() {
+        return unitListEmployee;
+    }
+
+    public void setUnitListEmployee(List<Unit> unitListEmployee) {
+        this.unitListEmployee = unitListEmployee;
+    }
+
+//    @Override
+//    public String toString() {
+////        return "Employee{" +
+////                "fullName='" + fullName + '\'' +
+////                ", currentPosition=" + currentPosition +
+////                ", beginningSignature=" + beginningSignature +
+////                ", endSignature=" + endSignature +
+////                ", typePosition='" + typePosition + '\'' +
+////                ", mainPosition=" + mainPosition +
+////                ", unitEmp=" + unitEmp +
+////                ", inn='" + inn + '\'' +
+////                ", snils='" + snils + '\'' +
+////                ", fon='" + fon + '\'' +
+////                '}';
+//        int i = fullName.length();
+//
+//       String name =  String.format("|%-50s|", fullName);
+//       String current =  String.format("|%50s|", currentPosition.getWorkPosition());
+//       String begin =  String.format("|%td%tm%tY|", beginningSignature, beginningSignature, beginningSignature);
+//       String end =  String.format("|%td%tm%tY|", endSignature, endSignature, endSignature);
+//       String position = String.format("|%-30s|", typePosition);
+//       return (name + " " + current + " " + begin + " " + end + " " + position);
+//
+//
+//    }
+
     public String[] getObsTypePosition() {
         String[] obsType = new String[]{"Врач", "Средний медицинский персонал", "Младший медицинский персонал", "Административно-хозяйственный персонал", "Вспомогательный персонал"};
         return obsType;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass( ) != o.getClass( )) return false;
+        Employee employee = (Employee) o;
+        return Id.equals(employee.Id);
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id);
+    }
 }

@@ -65,28 +65,7 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String pattern = "dd.MM.yyyy";
-        dpDateConnect.setPromptText(pattern.toLowerCase( ));
-        dpDateConnect.getEditor( ).focusedProperty( ).addListener(new ChangeListener<Boolean>( )//focus on the TextField object of the DatePicker
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
-                if (newPropertyValue == false) {
-                    try {
-                        SimpleDateFormat sdf = new SimpleDateFormat(dpDateConnect.getEditor( ).getText( ));
-                        sdf.setLenient(false);
-                        //if not valid, it will throw ParseException
-                        Date date = sdf.parse(dpDateConnect.getEditor( ).getText( ));
-                        System.out.println(date);
-                    } catch (Exception e) {
-                        e.printStackTrace( );
-                        dpDateConnect.getEditor( ).setText("");
-                    }
-                }
-            }
 
-            ;
-        });
     }
 
 

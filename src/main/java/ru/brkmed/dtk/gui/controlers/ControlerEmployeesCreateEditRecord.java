@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
@@ -14,16 +15,14 @@ import ru.brkmed.dtk.gui.main.AbstractGUIControler;
 import ru.brkmed.dtk.gui.main.GUIConnections;
 import ru.brkmed.dtk.gui.main.GUIEmployee;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ControlerEmployeesCreateEditRecord extends AbstractChildWindow{
+public class ControlerEmployeesCreateEditRecord extends AbstractChildWindow implements Initializable {
 
     @FXML
     private Button btnSaveEdit;
@@ -60,6 +59,7 @@ public class ControlerEmployeesCreateEditRecord extends AbstractChildWindow{
 
     private static final String startCert = "01.01.2022";
     private static final String endCert = "01.01.2023";
+
 
 
     @FXML
@@ -159,4 +159,8 @@ public class ControlerEmployeesCreateEditRecord extends AbstractChildWindow{
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }
