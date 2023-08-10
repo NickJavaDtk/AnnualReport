@@ -36,10 +36,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 
@@ -78,6 +76,8 @@ public abstract class AbstractGUIControler {
     private final String textLoadButton = "Загрузить";
 
     private final String textLabel = "Поиск";
+
+    private Label countRecordLabel;
 
     Double screenSizeWidth = Toolkit.getDefaultToolkit( ).getScreenSize( ).getWidth();
 
@@ -133,16 +133,16 @@ public abstract class AbstractGUIControler {
         setValueTableView(tableView);
         Label countRecordBuilding = new Label( "Количество записей" );
         countRecordBuilding.setLayoutX(14.0);
-        countRecordBuilding.setLayoutY(485.0);
-        externAnchorPane.setBottomAnchor(countRecordBuilding, 5.0);
+        countRecordBuilding.setLayoutY(487.0);
+        externAnchorPane.setBottomAnchor(countRecordBuilding, 3.0);
         externAnchorPane.setLeftAnchor(countRecordBuilding, 14.0);
         externAnchorPane.getChildren().add(countRecordBuilding);
         String countRecord = String.valueOf(tableView.getItems().size());
-        Label resultBuilding = new Label(countRecord);
-        resultBuilding.setLayoutX(138.0);
-        resultBuilding.setLayoutY(485.0);
-        externAnchorPane.setBottomAnchor(resultBuilding, 5.0);
-        externAnchorPane.getChildren().add(resultBuilding);
+        countRecordLabel= new Label(countRecord);
+        countRecordLabel.setLayoutX(138.0);
+        countRecordLabel.setLayoutY(487.0);
+        externAnchorPane.setBottomAnchor(countRecordLabel, 3.0);
+        externAnchorPane.getChildren().add(countRecordLabel);
 
         externAnchorPane.getChildren().add(tableView);
         externAnchorPane.getChildren().add(innerAnchorPane);
@@ -306,6 +306,7 @@ public abstract class AbstractGUIControler {
             if (button.getText().equals("Создать")) {
                 fillValuesCreateWindow(parent);
                 resetFindTextField(menuUpdateFilter);
+
             }
             if (button.getText( ).equals("Изменить")) {
                 fillValuesEditWindow(parent);
@@ -328,11 +329,27 @@ public abstract class AbstractGUIControler {
     }
 
     public void getNewDialogWindowDelete(Button button) {
+//        button.setOnAction(actionEvent -> {
+//            int n =   JOptionPane.showConfirmDialog(null,
+//                    "Вы действительно хотите удалить текущую запись", "Подтвердите удаление",
+//                    JOptionPane.YES_NO_OPTION);
+//            if (n == JOptionPane.OK_OPTION) {
+//                deleteRecord();
+//                resetFindTextField(getMenuUpdateFilter());
+//
+//            }
+//        });
         button.setOnAction(actionEvent -> {
-            int n =   JOptionPane.showConfirmDialog(null,
-                    "Вы действительно хотите удалить текущую запись", "Подтвердите удаление",
-                    JOptionPane.YES_NO_OPTION);
-            if (n == JOptionPane.OK_OPTION) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Подтвердите удаление");
+            alert.setHeaderText("Вы действительно хотите удалить текущую запись");
+            alert.setContentText(null);
+            ButtonType buttonOK = new ButtonType("Да");
+            ButtonType buttonNo = new ButtonType("Нет");
+            alert.getButtonTypes().clear();
+            alert.getButtonTypes().addAll(buttonOK, buttonNo);
+            Optional<ButtonType> optional = alert.showAndWait();
+            if (optional.get() == buttonOK) {
                 deleteRecord();
                 resetFindTextField(getMenuUpdateFilter());
             }
@@ -418,6 +435,10 @@ public abstract class AbstractGUIControler {
 
     public ContextMenu getMenuUpdateFilter() {
         return menuUpdateFilter;
+    }
+
+    public Label getCountRecordLabel() {
+        return countRecordLabel;
     }
 
     public  AbstractEntity getRecordTableView() {

@@ -135,14 +135,15 @@ public class GUIDevice extends AbstractGUIControler{
             public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
                 Integer choice = newNumber.intValue( );
                 ObservableList<String> observableList = typeOC.getItems( );
-                if (choice == 0 ) {
+                if (choice == 0 || choice == 3) {
                     if (observableList.size() == 0) {
                         typeOC.getItems( ).addAll(getObsTypeOC( ));
                         connect.setDisable(false);
                     }
-                } else if (observableList.size() != 0) {
+                }  else if (observableList.size() != 0 || connect.isSelected()) {
                     ObservableList<String> obs = FXCollections.observableArrayList();
                     typeOC.setItems(obs);
+                    connect.setSelected(false);
                     connect.setDisable(true);
                 }
             }
@@ -166,14 +167,16 @@ public class GUIDevice extends AbstractGUIControler{
             public void changed(ObservableValue<? extends Number> observableValue, Number oldNumber, Number newNumber) {
                 Integer choice = newNumber.intValue( );
                 ObservableList<String> observableList = typeOC.getItems( );
-                if (choice == 0 ) {
+                if (choice == 0 || choice == 3) {
                     if (observableList.size() == 0) {
                         typeOC.getItems( ).addAll(getObsTypeOC( ));
                         connect.setDisable(false);
                     }
-                } else if (observableList.size() != 0) {
+                } else if (observableList.size() != 0 || connect.isSelected()) {
                     ObservableList<String> obs = FXCollections.observableArrayList();
                     typeOC.setItems(obs);
+                    connect.setSelected(false);
+                    connect.setDisable(true);
 
                 }
             }
@@ -199,6 +202,7 @@ public class GUIDevice extends AbstractGUIControler{
             @Override
             public void handle(WindowEvent windowEvent) {
                 tableDevice.setItems((ObservableList<Device>) getObservableList( ));
+                getCountRecordLabel().setText(String.valueOf(tableDevice.getItems().size()));
             }
         });
     }
@@ -266,6 +270,7 @@ public class GUIDevice extends AbstractGUIControler{
         ControlerDaoDevice controlerDaoDevice = new ControlerDaoDevice();
         controlerDaoDevice.deleteDevice(device.getId());
         tableDevice.setItems((ObservableList<Device>) getObservableList( ));
+        getCountRecordLabel().setText(String.valueOf(tableDevice.getItems().size()));
     }
 
     @Override

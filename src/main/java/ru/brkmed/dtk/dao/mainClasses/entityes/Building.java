@@ -18,7 +18,7 @@ public class Building extends AbstractEntity implements Serializable {
     private String adressBuilding;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     protected Unit unit;
-    @OneToMany(mappedBy = "build")
+    @OneToMany(mappedBy = "department")
     public Collection<Connection> listConnection = new ArrayList<>(  );
     @OneToMany(mappedBy = "building")
     public Collection<Department> listDepartment = new ArrayList<>(  );

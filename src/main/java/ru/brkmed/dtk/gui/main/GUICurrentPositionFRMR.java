@@ -157,6 +157,7 @@ public class GUICurrentPositionFRMR extends AbstractGUIControler {
             @Override
             public void handle(WindowEvent windowEvent) {
                 tablePositionFRMR.setItems((ObservableList<CurrentPositionFRMR>) getObservableList( ));
+                getCountRecordLabel().setText(String.valueOf(tablePositionFRMR.getItems().size()));
             }
         });
 

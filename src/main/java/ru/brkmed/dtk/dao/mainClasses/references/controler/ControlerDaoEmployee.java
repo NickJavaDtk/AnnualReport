@@ -38,7 +38,7 @@ public class ControlerDaoEmployee {
         try {
             tx = session.beginTransaction();
             List  employeeTmp =  session.createQuery("select e.id, e.fullName, e.currentPosition, e.beginningSignature," +
-                    "e.endSignature, e.typePosition, e.mainPosition, e.inn, e.snils, e.fon FROM Employee e" ).setMaxResults(5) .list();
+                    "e.endSignature, e.typePosition, e.mainPosition, e.inn, e.snils, e.fon FROM Employee e" ) .list();
             for (Iterator iterator = employeeTmp.iterator(); iterator.hasNext();){
                 Object[] obj = (Object[])iterator.next();
                 Long id = Long.parseLong(String.valueOf(obj[0]));

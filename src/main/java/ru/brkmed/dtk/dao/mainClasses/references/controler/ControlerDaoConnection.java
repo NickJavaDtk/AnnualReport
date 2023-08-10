@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Department;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -36,13 +37,13 @@ public class ControlerDaoConnection {
         SimpleDateFormat formatDate = new SimpleDateFormat( "yyyy-MM-dd", Locale.ENGLISH );
         try {
             tx = session.beginTransaction();
-            List  connectionTmp =  session.createQuery("select c.Id, c.nameConnection, c.build, c.dateConnection," +
-                    "c.suplier, c.typeConnection, c.speedConnection, c.tax, c.startTax, c.typeTax FROM Connection c").list();
+            List  connectionTmp =  session.createQuery("select c.Id, c.nameConnection, c.department, c.dateConnection, c.suplier, c.typeConnection, c.speedConnection, c.tax, c.startTax, c.typeTax, c.helpPolic, " +
+                    "c.helpHosp, c.help, c.task FROM Connection c").list();
             for (Iterator iterator = connectionTmp.iterator(); iterator.hasNext();){
                 Object[] obj = (Object[])iterator.next();
                 Long id = Long.parseLong(String.valueOf(obj[0]));
                 String nameConnect = String.valueOf(obj[1]);
-                Building buildConnect = (Building)(obj[2]);
+                Department depConnect = (Department) (obj[2]);
                 Date dateConnect = formatDate.parse(String.valueOf(obj[3]));
                 String suplierConnect = String.valueOf(obj[4]);
                 String typeConnect = String.valueOf(obj[5]);
@@ -50,8 +51,12 @@ public class ControlerDaoConnection {
                 Double taxConnect = Double.parseDouble(String.valueOf(obj[7]));
                 Double startTax = Double.parseDouble(String.valueOf(obj[8]));
                 String typeTaxConnect = String.valueOf(obj[9]);
+                Boolean helpPolic = Boolean.valueOf(String.valueOf(obj[10]));
+                Boolean helpHosp = Boolean.valueOf(String.valueOf(obj[11]));
+                Boolean help = Boolean.valueOf(String.valueOf(obj[12]));
+                Boolean task = Boolean.valueOf(String.valueOf(obj[13]));
 
-                connectionList.add(new Connection(id, nameConnect , buildConnect, dateConnect, suplierConnect, typeConnect,
+                connectionList.add(new Connection(id, nameConnect , depConnect, helpPolic, helpHosp, help, task, dateConnect, suplierConnect, typeConnect,
                         speedConnect, taxConnect, startTax, typeTaxConnect ));
             }
             // System.out.println(building);
@@ -90,7 +95,11 @@ public class ControlerDaoConnection {
             tx = session.beginTransaction( );
             Connection connect = (Connection) session.get(Connection.class, Id);
             connect.setNameConnection(tmpConnect.getNameConnection());
-            connect.setBuild(tmpConnect.getBuild());
+            connect.setDepartment(tmpConnect.getDepartment());
+            connect.setHelpPolic(tmpConnect.getHelpPolic());
+            connect.setHelpHosp(tmpConnect.getHelpHosp());
+            connect.setHelp(tmpConnect.getHelp());
+            connect.setTask(tmpConnect.getTask());
             connect.setDateConnection(tmpConnect.getDateConnection());
             connect.setSuplier(tmpConnect.getSuplier( ));
             connect.setTypeConnection(tmpConnect.getTypeConnection( ));
@@ -115,7 +124,7 @@ public class ControlerDaoConnection {
         try {
             tx = session.beginTransaction();
             Connection connect = (Connection) session.get(Connection.class, Id);
-            connect.setBuild(null);
+            connect.setDepartment(null);
             session.delete(connect);
             tx.commit();
         } catch (HibernateException e) {

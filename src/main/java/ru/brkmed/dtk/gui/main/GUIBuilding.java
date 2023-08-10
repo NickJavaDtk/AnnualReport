@@ -306,43 +306,17 @@ public class GUIBuilding extends AbstractGUIControler implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        ObservableList<Building> observableList = FXCollections.observableArrayList();
-//        observableList.addAll(new ControlerDaoBuilding().listBuilding());
-//        FilteredList<Building> filterData = new FilteredList<>(obsBuild, b -> true);
-//        find.textProperty().addListener((observable, oldValue, newValue) -> {
-//            filterData.setPredicate(building -> {
-//                if (newValue == null || newValue.isEmpty()) {
-//                    return true;
-//                }
-//                String lowerCaseFilter = newValue.toLowerCase();
-//                if (String.valueOf(building.getId()).indexOf(lowerCaseFilter) != -1) {
-//                    return true;
-//                } else if (building.getNameBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-//                    return true;
-//                } else if (building.getAdressBuilding().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            });
 //
-//
-//        });
-//        SortedList<Building> sortedData = new SortedList<>(filterData);
-//        TableView<Building> tableBuild = GUIBuilding.getTableBuilding( );
-//        sortedData.comparatorProperty().bind(tableBuild.comparatorProperty());
-//        tableBuild.setItems(sortedData);
-
     }
 
     public void alternativeTab(TabPane tabPane) {
         super.basicWindowTab(tabPane, "Новый путь зданий");
         create = super.getCreateButton();
         super.getNewDialogWindow(create,
-                "/BuildingCreateEditRecord.fxml", "Создать здание по новому пути");
+                "/BuildingCreateEditRecord.fxml", "Добавить здание");
         edit = super.getEditButton();
         super.getNewDialogWindow(edit,
-                "/BuildingCreateEditRecord.fxml", "Изменить здание по новому пути");
+                "/BuildingCreateEditRecord.fxml", "Изменить здание");
        // setButton(super.getPresButton());
         delete = super.getDeleteButton();
         getNewDialogWindowDelete(delete);
@@ -418,6 +392,7 @@ public class GUIBuilding extends AbstractGUIControler implements Initializable {
             @Override
             public void handle(WindowEvent windowEvent) {
                tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+               getCountRecordLabel().setText(String.valueOf(tableBuilding.getItems().size()));
             }
         });
     }
@@ -477,6 +452,7 @@ public class GUIBuilding extends AbstractGUIControler implements Initializable {
         ControlerDaoBuilding daoBuilding = new ControlerDaoBuilding();
         daoBuilding.deleteBuild(building.getId( ));
         tableBuilding.setItems((ObservableList<Building>) getObservableList( ));
+        getCountRecordLabel().setText(String.valueOf(tableBuilding.getItems().size()));
 
     }
 

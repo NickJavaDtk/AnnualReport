@@ -1,7 +1,6 @@
 package ru.brkmed.dtk.gui.controlers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,22 +9,26 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Department;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
 import ru.brkmed.dtk.gui.main.AbstractGUIControler;
 import ru.brkmed.dtk.gui.main.GUIConnections;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.*;
 
 public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow implements Initializable {
+    public CheckBox chcHelpPolic;
+    public CheckBox chcHelpHosp;
+    public CheckBox chcTask;
+    public CheckBox chcHelp;
     @FXML
     private Button btnConnectCrEdit;
 
     @FXML
-    private   ChoiceBox<String> chcBoxSetBuild;
+    private   ChoiceBox<String> chcBoxSetDepartment;
 
 
     @FXML
@@ -105,10 +108,15 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
                 super.checkTextListDatePickerField(addListDtpick())} ;
         if (guiButton.get(0).getText().equals("Создать")) {
             if (super.getBoolValue(array)) {
+                Connection connection = getOverFieldConnection();
                 contDao.addConnection(getOverFieldConnection());
                 super.nullSetTxtField(addListTxtField());
                 super.nullSetChcBox(addListChcBox());
                 super.nullSetDtPicker(addListDtpick());
+                chcHelpPolic.setSelected(false);
+                chcHelpHosp.setSelected(false);
+                chcHelp.setSelected(false);
+                chcTask.setSelected(false);
 
             }
 
@@ -119,8 +127,8 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
                 Long id = GUIConnections.getConnectRecord().getId();
                 contDao.updateConnections(id, getOverFieldConnection());
                 TableView<Connection> tblView = GUIConnections.getControlerGUIConnections().getTableConnection();
-                AbstractGUIControler absGUI = new GUIConnections(  );
-                ObservableList<Connection> observableList = (ObservableList<Connection>) absGUI.getObservableList();
+                List<Connection> list = contDao.listConnections();
+                ObservableList<Connection> observableList = FXCollections.observableArrayList( list );
                 tblView.setItems(observableList);
                 GUIConnections.getControlerGUIConnections().getStage().close();
             }
@@ -206,8 +214,8 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
 */
     }
 
-    public void setChcBoxSetBuild(ChoiceBox<String> chcBoxSetBuild) {
-        this.chcBoxSetBuild = chcBoxSetBuild;
+    public void setChcBoxSetDepartment(ChoiceBox<String> chcBoxSetDepartment) {
+        this.chcBoxSetDepartment = chcBoxSetDepartment;
 
     }
 
@@ -286,16 +294,20 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
     public Connection getOverFieldConnection() {
         Connection connect = new Connection();
         connect.setNameConnection(txtFieldNameConnect.getText());
-        Map<Long, Building> choice = GUIConnections.getMapChcBoxBuild();
-        Building build = null;
-        String nameCon = chcBoxSetBuild.getValue();
-        for(Map.Entry<Long, Building> map : choice.entrySet()) {
-            Building tmpBuild = map.getValue();
-            if (nameCon.equals(tmpBuild.getNameBuilding())) {
-                build = tmpBuild;
+        Map<Long, Department> choice = GUIConnections.getMapChcBoxBuild();
+        Department department = null;
+        String nameCon = chcBoxSetDepartment.getValue();
+        for(Map.Entry<Long, Department> map : choice.entrySet()) {
+            Department tmpDepartment = map.getValue();
+            if (nameCon.equals(tmpDepartment.getNameDepartment())) {
+                department = tmpDepartment;
             }
         }
-        connect.setBuild(build);
+        connect.setDepartment(department);
+        connect.setHelpPolic(chcHelpPolic.isSelected());
+        connect.setHelpHosp(chcHelpHosp.isSelected());
+        connect.setHelp(chcHelp.isSelected());
+        connect.setTask(chcTask.isSelected());
         Date date = Date.from(dpDateConnect.getValue().atStartOfDay(ZoneId.systemDefault( )).toInstant());
         connect.setDateConnection(date);
         connect.setSuplier(txtFieldSuplier.getText());
@@ -317,7 +329,7 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
     public List<Parent> getMinSceneList() {
         List<Parent> list = new ArrayList<>();
         list.add(txtFieldConnect);
-        list.add(chcBoxSetBuild);
+        list.add(chcBoxSetDepartment);
         list.add(dpDateConnect);
         return list;
 
@@ -340,7 +352,7 @@ public class ControlerConnectionsCreateEditRecord extends AbstractChildWindow im
     @Override
     public List<ChoiceBox<String>> addListChcBox() {
         List<ChoiceBox<String>> chcList = new ArrayList<>(  );
-        chcList.add(chcBoxSetBuild);
+        chcList.add(chcBoxSetDepartment);
         chcList.add(chcBoxTypeConnect);
         chcList.add(chcBoxTypeTax);
         return chcList;

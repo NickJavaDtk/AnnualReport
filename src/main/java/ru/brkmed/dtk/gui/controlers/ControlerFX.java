@@ -17,6 +17,7 @@ import java.util.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import ru.brkmed.dtk.reports.form30.table7000.Table7000Dao;
 
 public class ControlerFX extends Application implements Initializable {
     @FXML private TextField nameText;
@@ -68,6 +69,8 @@ public class ControlerFX extends Application implements Initializable {
 //
 //     });
 //        System.out.println(s + s1 + s2);
+
+
     }
 
     public ControlerFX() {

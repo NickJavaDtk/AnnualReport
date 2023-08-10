@@ -14,7 +14,15 @@ public class Connection extends AbstractEntity implements Serializable {
     @Column(nullable = false)
     private String nameConnection;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    protected Building build;
+    protected Department department;
+    @Column(name = "is_polic", nullable = true)
+    private Boolean helpPolic;
+    @Column(name = "is_hosp", nullable = true)
+    private Boolean helpHosp;
+    @Column(name = "is_help", nullable = true)
+    private Boolean help;
+    @Column(name = "is_task", nullable = true)
+    private Boolean task;
     @Temporal(value = TemporalType.DATE)
     @Column(nullable = false)
     @NotNull
@@ -35,10 +43,14 @@ public class Connection extends AbstractEntity implements Serializable {
     public Connection() {
     }
 
-    public Connection(String nameConnection, Building build, Date dateConnection, String suplier,
-                      String typeConnection, Double speedConnection, Double tax, Double startTax, String typeTax) {
+    public Connection(Long id, String nameConnection, Department department, Boolean helpPolic, Boolean helpHosp, Boolean help, Boolean task, Date dateConnection, String suplier, String typeConnection, Double speedConnection, Double tax, Double startTax, String typeTax) {
+        Id = id;
         this.nameConnection = nameConnection;
-        this.build = build;
+        this.department = department;
+        this.helpPolic = helpPolic;
+        this.helpHosp = helpHosp;
+        this.help = help;
+        this.task = task;
         this.dateConnection = dateConnection;
         this.suplier = suplier;
         this.typeConnection = typeConnection;
@@ -48,11 +60,13 @@ public class Connection extends AbstractEntity implements Serializable {
         this.typeTax = typeTax;
     }
 
-    public Connection(Long id, String nameConnection, Building build, Date dateConnection, String suplier,
-                      String typeConnection, Double speedConnection, Double tax, Double startTax, String typeTax) {
-        Id = id;
+    public Connection(String nameConnection, Department department, Boolean helpPolic, Boolean helpHosp, Boolean help, Boolean task, Date dateConnection, String suplier, String typeConnection, Double speedConnection, Double tax, Double startTax, String typeTax) {
         this.nameConnection = nameConnection;
-        this.build = build;
+        this.department = department;
+        this.helpPolic = helpPolic;
+        this.helpHosp = helpHosp;
+        this.help = help;
+        this.task = task;
         this.dateConnection = dateConnection;
         this.suplier = suplier;
         this.typeConnection = typeConnection;
@@ -78,12 +92,50 @@ public class Connection extends AbstractEntity implements Serializable {
         this.nameConnection = nameConnection;
     }
 
-    public Building getBuild() {
-        return build;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setBuild(Building build) {
-        this.build = build;
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public Boolean getHelpPolic() {
+        return helpPolic != null ? helpPolic : null;
+    }
+
+    public void setHelpPolic(Boolean helpPolic) {
+        Boolean bool = helpPolic != null ? helpPolic : false;
+        this.helpPolic = bool;
+
+    }
+
+    public Boolean getHelpHosp() {
+        return helpHosp != null ? helpHosp : false;
+    }
+
+    public void setHelpHosp(Boolean helpHosp) {
+        Boolean bool = helpHosp != null ? helpHosp : false;
+        this.helpHosp = bool;
+
+    }
+
+    public Boolean getHelp() {
+        return help != null ? help : false;
+    }
+
+    public void setHelp(Boolean help) {
+        Boolean bool = help != null ? help : false;
+        this.help = bool;
+    }
+
+    public Boolean getTask() {
+        return task != null ? task : false;
+    }
+
+    public void setTask(Boolean task) {
+        Boolean bool = task != null ? task : false;
+        this.task = bool;
     }
 
     public Date getDateConnection() {
@@ -143,12 +195,12 @@ public class Connection extends AbstractEntity implements Serializable {
     }
 
     public String[] getObsTypeConnect() {
-        String[] obsType = new String[]{"Модем", "DSL", "Оптоволокно", "Радиодоступ", "Спутниковый канал", "VPN" };
+        String[] obsType = new String[]{"Модем", "DSL", "Оптоволокно", "Радиодоступ", "Спутниковый канал", "VPN"};
         return obsType;
     }
 
     public String[] getObsTypeTax() {
-        String[] obsType = new String[]{"Оператор связи", "Региональный бюджет", "Собственные средства МО", "Федеральный бюджет", "Фонд ОМС", "Не указано" };
+        String[] obsType = new String[]{"Оператор связи", "Региональный бюджет", "Собственные средства МО", "Федеральный бюджет", "Фонд ОМС", "Не указано"};
         return obsType;
     }
 }

@@ -127,6 +127,25 @@ public class ControlerDaoDevice {
             devices.setTypeOC(device.getTypeOC());
             devices.setTerm(device.getTerm());
             devices.setConnect(device.isConnect());
+            devices.setUnitDev(device.getUnitDev());
+            session.update(devices);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) tx.rollback( );
+            e.printStackTrace( );
+
+        } finally {
+            session.close();
+        }
+    }
+
+    public void updateDevicesUnit(Long Id, Device device) {
+        Session session = ControlerDaoDevice.getFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction( );
+            Device devices =  session.get(Device.class, Id);
+            devices.setUnitDev(device.getUnitDev());
             session.update(devices);
             tx.commit();
         } catch (HibernateException e) {

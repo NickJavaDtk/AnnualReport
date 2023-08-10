@@ -6,6 +6,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -31,7 +34,9 @@ import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoEmployee;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoUnit;
 import ru.brkmed.dtk.gui.main.*;
 import ru.brkmed.dtk.gui.model.ListNodes;
+import ru.brkmed.dtk.reports.form30.table7000.ControlerGUITable7000;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -42,14 +47,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MainGUIControler implements Initializable {
+    public TextField findRecordTableView;
+    public Button deleteCabinet;
+    public MenuItem menuItemTable7000;
+    public MenuItem menuItemTable7001;
+    public MenuItem menuItemTable7002;
     @FXML
     private Button createCabinet;
 
     @FXML
     private Button editCabinet;
-
-    @FXML
-    private Button loadCabinet;
 
     @FXML
     private Label lblCountRecord;
@@ -111,6 +118,8 @@ public class MainGUIControler implements Initializable {
 
     private static Stage parentStage;
 
+    private ContextMenu contextMenu;
+
 
 
 
@@ -170,11 +179,27 @@ public class MainGUIControler implements Initializable {
 
     }
 
+    public void createTable7000(ActionEvent actionEvent) {
+        ControlerGUITable7000 guiTable7000 = new ControlerGUITable7000();
+        guiTable7000.createWindowsReport();
+
+    }
+
+    public void createTable7001(ActionEvent actionEvent) {
+    }
+
+    public void createTable7002(ActionEvent actionEvent) {
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        contextMenu = getUpdateFilter();
         tableUnit = setValueTableView(tblViewUnit);
+        tableUnit.setContextMenu(contextMenu);
         obsUnit = getObsUnit();
-        tableUnit.getItems().addAll(obsUnit);
+        SortedList<Unit> sortedList = findValueRecord(tableUnit, obsUnit, findRecordTableView);
+        tableUnit.setItems(sortedList);
+        resetFindTextField(contextMenu, tableUnit, findRecordTableView);
         lblCountRecord.setText(String.valueOf(tableUnit.getItems().size()));
     }
 
@@ -200,7 +225,9 @@ public class MainGUIControler implements Initializable {
         stage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
             @Override
             public void handle(WindowEvent windowEvent) {
-                tblViewUnit.setItems(getObsUnit());
+                tableUnit.setItems(getObsUnit());
+                lblCountRecord.setText(String.valueOf(tableUnit.getItems().size()));
+                resetFindTextField(contextMenu, tableUnit, findRecordTableView);
 
             }
         });
@@ -210,6 +237,26 @@ public class MainGUIControler implements Initializable {
 
     @FXML
     void btnDelete(ActionEvent event) {
+//            int n = JOptionPane.showConfirmDialog(null,
+//                    "Вы действительно хотите удалить текущую запись", "Подтвердите удаление",
+//                    JOptionPane.YES_NO_OPTION);
+//            if (n == JOptionPane.OK_OPTION) {
+//                deleteRecord( );
+//                resetFindTextField(contextMenu, tableUnit, findRecordTableView);
+//            }
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Подтвердите удаление");
+            alert.setHeaderText("Вы действительно хотите удалить текущую запись");
+            alert.setContentText(null);
+            Optional<ButtonType> button = alert.showAndWait();
+            if (button.get() == ButtonType.OK) {
+                deleteRecord( );
+                tableUnit.setItems(getObsUnit());
+                resetFindTextField(contextMenu, tableUnit, findRecordTableView);
+                lblCountRecord.setText(String.valueOf(tableUnit.getItems().size()));
+            }
+
+
 
     }
 
@@ -235,7 +282,8 @@ public class MainGUIControler implements Initializable {
         parentStage.addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, new EventHandler<WindowEvent>( ) {
             @Override
             public void handle(WindowEvent windowEvent) {
-                tblViewUnit.setItems(getObsUnit());
+                tableUnit.setItems(getObsUnit());
+
 
             }
         });
@@ -291,6 +339,27 @@ public class MainGUIControler implements Initializable {
                 }
             }
         });
+        TableColumn<Unit, String> empTest = new TableColumn<>( "Сотрудв" );
+        empTest.setPrefWidth(185.0);
+        empTest.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unit, String>, ObservableValue<String>>( ) {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Unit, String> unitTextCell) {
+                List<Employee> employeeList =  unitTextCell.getValue().getEmployees();
+                if (employeeList.size() != 0) {
+                    StringBuilder builder = new StringBuilder(  );
+                    List<String> list = employeeList.stream( ).map(Employee::getFullName).collect(Collectors.toList( ));
+                    list.forEach(name -> builder.append(name + "\n"));
+//                    TextField field = new TextField( builder.toString() );
+//                    field.
+                   
+                    return new ReadOnlyObjectWrapper<>( builder.toString() );
+                } else {
+                    //TextField field = new TextField( "" );
+                    return new ReadOnlyObjectWrapper<>( "");
+                }
+
+            }
+        });
         TableColumn<Unit, List<String>> devices = new TableColumn<>( "Оборудование" );
         devices.setPrefWidth(185.0);
         devices.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Unit, List<String>>, ObservableValue<List<String>>>( ) {
@@ -308,7 +377,8 @@ public class MainGUIControler implements Initializable {
             }
         });
 
-        tableView.getColumns().addAll(id, nameUnit, department, helpPolic, helpHosp, help, task, employees, devices);
+        tableView.getColumns().addAll(id, nameUnit, department, helpPolic, helpHosp, help, task, empTest, devices);
+
 
         return tableView;
 
@@ -841,6 +911,72 @@ public class MainGUIControler implements Initializable {
         });
     }
 
+    public SortedList<Unit> findValueRecord(TableView<Unit> tableView, ObservableList<Unit> observableList, TextField txtFieldFind) {
+        FilteredList<Unit> filterData = new FilteredList<>( observableList, b -> true);
+        txtFieldFind.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterData.setPredicate(unit -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (String.valueOf(unit.getId()).indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (unit.getNameUnit().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (unit.getDepartment().getNameDepartment().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                    return true;
+                } else if (unit.getEmployees().size() != 0 || unit.getDevices().size() != 0) {
+                    if (unit.getEmployees().stream().anyMatch(employee -> employee.getFullName( ).toLowerCase( ).contains(lowerCaseFilter))) {
+                        return true;
+                    } else if (unit.getDevices( ).stream( ).anyMatch(device -> device.getBrand( ).toLowerCase( ).contains(lowerCaseFilter))) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                else {
+                    return false;
+                }
+            });
+
+
+        });
+        SortedList<Unit> sortedData = new SortedList<>(filterData);
+        TableView<Unit> unitTableView =  tableView;
+        sortedData.comparatorProperty().bind(unitTableView.comparatorProperty());
+        return sortedData;
+    }
+
+    public void resetFindTextField(ContextMenu contextMenu, TableView<Unit> tableView,  TextField textField) {
+        MenuItem menuItem = contextMenu.getItems( ).get(0);
+        menuItem.setOnAction(actionEvent -> {
+            ObservableList<Unit> observableList = getObsUnit();
+            SortedList<Unit> sortedListField =  findValueRecord(tableView, observableList, textField);
+            tableView.setItems(sortedListField);
+        });
+    }
+
+    public ContextMenu getUpdateFilter() {
+        MenuItem updateFilter = new MenuItem( "Обновить поиск" );
+        ContextMenu contextMenu = new ContextMenu( updateFilter );
+        return contextMenu;
+    }
+
+    public void deleteRecord() {
+        Unit unit = getRecordTableView();
+        List<Device> deviceList = daoDevice.listDevicesUnit();
+        for (Device devices: deviceList ) {
+            Unit unitDevice = devices.getUnitDev();
+            if (unitDevice != null) {
+                if (unit.getId( ).equals(unitDevice.getId( ))) {
+                    devices.setUnitDev(null);
+                    daoDevice.updateDevicesUnit(devices.getId( ), devices);
+                }
+            }
+        }
+        new ControlerDaoUnit().deleteUnit(unit.getId( ));
+    }
+
 
     public GUIDevice getGuiDevice() {
         return guiDevice;
@@ -865,6 +1001,7 @@ public class MainGUIControler implements Initializable {
     public static Stage getParentStage() {
         return parentStage;
     }
+
 
 
 }

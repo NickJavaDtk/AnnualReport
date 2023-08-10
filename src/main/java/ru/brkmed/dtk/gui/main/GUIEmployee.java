@@ -214,6 +214,7 @@ public class GUIEmployee extends AbstractGUIControler{
             @Override
             public void handle(WindowEvent windowEvent) {
                 tableEmployee.setItems((ObservableList<Employee>) getObservableList( ));
+                getCountRecordLabel().setText(String.valueOf(tableEmployee.getItems().size()));
             }
         });
 
@@ -287,6 +288,7 @@ public class GUIEmployee extends AbstractGUIControler{
         ControlerDaoEmployee controlerDaoEmployee = new ControlerDaoEmployee();
         controlerDaoEmployee.deleteEmployee(employee.getId());
         tableEmployee.setItems((ObservableList<Employee>) getObservableList( ));
+        getCountRecordLabel().setText(String.valueOf(tableEmployee.getItems().size()));
 
     }
 

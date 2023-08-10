@@ -1,15 +1,19 @@
 package ru.brkmed.dtk.gui.main;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -17,13 +21,15 @@ import javafx.util.Callback;
 import ru.brkmed.dtk.dao.mainClasses.entityes.AbstractEntity;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Building;
 import ru.brkmed.dtk.dao.mainClasses.entityes.Connection;
-import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoBuilding;
+import ru.brkmed.dtk.dao.mainClasses.entityes.Department;
 import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoConnection;
+import ru.brkmed.dtk.dao.mainClasses.references.controler.ControlerDaoDepartment;
 import ru.brkmed.dtk.gui.model.ListNodes;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GUIConnections extends AbstractGUIControler {
 //    ObservableList<Connection> observableList = null;
@@ -37,7 +43,7 @@ public class GUIConnections extends AbstractGUIControler {
 //    private Long idConnect;
 
 
-    private static Map<Long, Building> mapChcBoxBuild;
+    private static Map<Long, Department> mapChcBoxBuild;
 
     //____________________________________
 
@@ -84,12 +90,12 @@ public class GUIConnections extends AbstractGUIControler {
         TableColumn<Connection, String> nameConnect = new TableColumn<>("Имя подключения");
         nameConnect.setPrefWidth(275.0);
         nameConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("nameConnection"));
-        TableColumn<Connection, String> nameBuilding = new TableColumn<>("Здание");
-        nameBuilding.setPrefWidth(275.0);
-        nameBuilding.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, String>, ObservableValue<String>>( ) {
+        TableColumn<Connection, String> nameDepartment = new TableColumn<>("Подразделение");
+        nameDepartment.setPrefWidth(275.0);
+        nameDepartment.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, String>, ObservableValue<String>>( ) {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Connection, String> connectionBuildString) {
-                return new ReadOnlyObjectWrapper<>(connectionBuildString.getValue( ).getBuild( ).getNameBuilding( ));
+                return new ReadOnlyObjectWrapper<>(connectionBuildString.getValue( ).getDepartment( ).getNameDepartment( ));
             }
         });
         // nameBuilding.setCellValueFactory(new PropertyValueFactory<Connection, Building>("build.nameBuilding"));
@@ -102,6 +108,74 @@ public class GUIConnections extends AbstractGUIControler {
                 return new ReadOnlyObjectWrapper<>(getStringDate(input));
             }
         });
+        TableColumn<Connection, Boolean> helpPolic = new TableColumn<>( "АП");
+        helpPolic.setPrefWidth(75.0);
+        helpPolic.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, Boolean>, ObservableValue<Boolean>>( ) {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Connection, Boolean> connectionBoolean) {
+                return new SimpleBooleanProperty( connectionBoolean.getValue().getHelpPolic());
+            }
+        });
+        helpPolic.setCellFactory(new Callback<TableColumn<Connection, Boolean>, TableCell<Connection, Boolean>>( ) {
+            @Override
+            public TableCell<Connection, Boolean> call(TableColumn<Connection, Boolean> connectionBooleanTableColumn) {
+                CheckBoxTableCell<Connection, Boolean> cell = new CheckBoxTableCell<>(  );
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+        TableColumn<Connection, Boolean> helpHosp = new TableColumn<>( "СП");
+        helpHosp.setPrefWidth(75.0);
+        helpHosp.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, Boolean>, ObservableValue<Boolean>>( ) {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Connection, Boolean> connectionBoolean) {
+                return new SimpleBooleanProperty( connectionBoolean.getValue().getHelpHosp());
+            }
+        });
+        helpHosp.setCellFactory(new Callback<TableColumn<Connection, Boolean>, TableCell<Connection, Boolean>>( ) {
+            @Override
+            public TableCell<Connection, Boolean> call(TableColumn<Connection, Boolean> connectionBooleanTableColumn) {
+                CheckBoxTableCell<Connection, Boolean> cell = new CheckBoxTableCell<>(  );
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+        TableColumn<Connection, Boolean> help = new TableColumn<>( "АЛП");
+        help.setPrefWidth(75.0);
+        help.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, Boolean>, ObservableValue<Boolean>>( ) {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Connection, Boolean> connectionBoolean) {
+                return new SimpleBooleanProperty( connectionBoolean.getValue().getHelp());
+            }
+        });
+        help.setCellFactory(new Callback<TableColumn<Connection, Boolean>, TableCell<Connection, Boolean>>( ) {
+            @Override
+            public TableCell<Connection, Boolean> call(TableColumn<Connection, Boolean> connectionBooleanTableColumn) {
+                CheckBoxTableCell<Connection, Boolean> cell = new CheckBoxTableCell<>(  );
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+        TableColumn<Connection, Boolean> task = new TableColumn<>( "АХД");
+        task.setPrefWidth(75.0);
+        task.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Connection, Boolean>, ObservableValue<Boolean>>( ) {
+            @Override
+            public ObservableValue<Boolean> call(TableColumn.CellDataFeatures<Connection, Boolean> connectionBoolean) {
+                return new SimpleBooleanProperty( connectionBoolean.getValue().getTask());
+            }
+        });
+        task.setCellFactory(new Callback<TableColumn<Connection, Boolean>, TableCell<Connection, Boolean>>( ) {
+            @Override
+            public TableCell<Connection, Boolean> call(TableColumn<Connection, Boolean> connectionBooleanTableColumn) {
+                CheckBoxTableCell<Connection, Boolean> cell = new CheckBoxTableCell<>(  );
+                cell.setAlignment(Pos.CENTER);
+                return cell;
+            }
+        });
+
+
+
+
         //connectDate.setCellValueFactory(new PropertyValueFactory<Connection, Date>("dateConnection"));
         TableColumn<Connection, String> suplierConnect = new TableColumn<>("Провайдер");
         suplierConnect.setPrefWidth(275.0);
@@ -122,7 +196,7 @@ public class GUIConnections extends AbstractGUIControler {
         typeTaxConnect.setPrefWidth(275.0);
         typeTaxConnect.setCellValueFactory(new PropertyValueFactory<Connection, String>("typeTax"));
 
-        tableConnection.getColumns( ).addAll(idConnect, nameConnect, nameBuilding, connectDate, suplierConnect,
+        tableConnection.getColumns( ).addAll(idConnect, nameConnect, nameDepartment, helpPolic, helpHosp, help, task, connectDate, suplierConnect,
                 typeConnect, speedConnect, taxConnect, taxStartConnect, typeTaxConnect);
 
         obsConnection = (ObservableList<Connection>) getObservableList( );
@@ -136,8 +210,13 @@ public class GUIConnections extends AbstractGUIControler {
     @Override
     public void fillValuesCreateWindow(Parent parent) {
         ArrayList<Node> listNodes = ListNodes.getAllNodes(parent);
-        ChoiceBox<String> choiceBoxBuild = (ChoiceBox<String>) listNodes.get(4);
-        choiceBoxBuild.getItems( ).addAll(getObsBuildConnect( ));
+        ChoiceBox<String> choiceBoxDep = (ChoiceBox<String>) listNodes.get(4);
+        CheckBox helpPolic = (CheckBox) listNodes.get(22);
+        CheckBox helpHosp = (CheckBox) listNodes.get(23);
+        CheckBox task = (CheckBox) listNodes.get(24);
+        CheckBox help = (CheckBox) listNodes.get(25);
+        setDepartmentChoiceBox(choiceBoxDep, helpPolic, helpHosp, help, task);
+        //choiceBoxBuild.getItems( ).addAll(getObsDepConnect( ));
         DatePicker datePicker = (DatePicker) listNodes.get(8);
         // setDataDatePicker(datePicker);
         // choiceBoxBuild.setValue("Выберите здание");
@@ -158,7 +237,7 @@ public class GUIConnections extends AbstractGUIControler {
     public void fillValuesEditWindow(Parent parent) {
         ArrayList<Node> listNodes = ListNodes.getAllNodes(parent);
         TextField nameConnection = (TextField) listNodes.get(3);
-        ChoiceBox<String> buildConnect = (ChoiceBox<String>) listNodes.get(4);
+        ChoiceBox<String> depConnect = (ChoiceBox<String>) listNodes.get(4);
         Button saveOrEdit = (Button) listNodes.get(6);
         DatePicker datePicker = (DatePicker) listNodes.get(8);
         TextField suplierConnection = (TextField) listNodes.get(10);
@@ -167,11 +246,19 @@ public class GUIConnections extends AbstractGUIControler {
         TextField tax = (TextField) listNodes.get(17);
         TextField connectionTax = (TextField) listNodes.get(18);
         ChoiceBox<String> typeTaxConnection = (ChoiceBox<String>) listNodes.get(21);
+        CheckBox helpPolic = (CheckBox) listNodes.get(22);
+        CheckBox helpHosp = (CheckBox) listNodes.get(23);
+        CheckBox task = (CheckBox) listNodes.get(24);
+        CheckBox help = (CheckBox) listNodes.get(25);
 
         connectRecord = (Connection) super.getRecordTableView( );
         nameConnection.setText(connectRecord.getNameConnection( ));
-        buildConnect.setValue(connectRecord.getBuild( ).getNameBuilding( ));
-        buildConnect.getItems( ).addAll(getObsBuildConnect( ));
+        depConnect.setValue(connectRecord.getDepartment( ).getNameDepartment());
+        helpPolic.setSelected(connectRecord.getHelpPolic());
+        helpHosp.setSelected(connectRecord.getHelpHosp());
+        help.setSelected(connectRecord.getHelp());
+        task.setSelected(connectRecord.getTask());
+        setDepartmentChoiceBox(depConnect, helpPolic, helpHosp, help, task);
         Instant instant = connectRecord.getDateConnection( ).toInstant( );
         datePicker.setValue(instant.atZone(ZoneId.systemDefault( )).toLocalDate( ));
         datePicker.getEditor( ).setDisable(true);
@@ -215,6 +302,7 @@ public class GUIConnections extends AbstractGUIControler {
             @Override
             public void handle(WindowEvent windowEvent) {
                 tableConnection.setItems((ObservableList<Connection>) getObservableList( ));
+                getCountRecordLabel().setText(String.valueOf(tableConnection.getItems().size()));
             }
         });
 
@@ -242,7 +330,7 @@ public class GUIConnections extends AbstractGUIControler {
                     return true;
                 } else if (connection.getNameConnection( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
                     return true;
-                } else if (connection.getBuild( ).getNameBuilding( ).toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
+                } else if (connection.getDepartment( ).getNameDepartment().toLowerCase( ).indexOf(lowerCaseFilter) != -1) {
                     return true;
                 } else if ((getStringDate(String.valueOf(connection.getDateConnection( ))).toLowerCase( ).indexOf(lowerCaseFilter) != -1)) {
                     return true;
@@ -289,19 +377,20 @@ public class GUIConnections extends AbstractGUIControler {
         ControlerDaoConnection controlerDaoConnection = new ControlerDaoConnection( );
         controlerDaoConnection.deleteConnection(connect.getId( ));
         tableConnection.setItems((ObservableList<Connection>) getObservableList( ));
+        getCountRecordLabel().setText(String.valueOf(tableConnection.getItems().size()));
     }
 
 
 
 
     public void alternativeTab(TabPane tabPane) {
-        super.basicWindowTab(tabPane, "Новый путь подключений");
+        super.basicWindowTab(tabPane, "Подключения к интернету");
         Button create = super.getCreateButton( );
         super.getNewDialogWindow(create,
-                "/ConnectionsCreateEditRecord.fxml", "Создать подключение по новому пути");
+                "/ConnectionsCreateEditRecord.fxml", "Создать подключение");
         Button edit = super.getEditButton( );
         super.getNewDialogWindow(edit,
-                "/ConnectionsCreateEditRecord.fxml", "Изменить подключение по новому пути");
+                "/ConnectionsCreateEditRecord.fxml", "Изменить подключение");
         // setButton(super.getPresButton());
         Button delete = super.getDeleteButton( );
         getNewDialogWindowDelete(delete);
@@ -309,18 +398,41 @@ public class GUIConnections extends AbstractGUIControler {
 
     }
 
-    public ObservableList<String> getObsBuildConnect() {
-        AbstractGUIControler absGUI = new GUIBuilding( );
-        ObservableList<Building> obsBuild = (ObservableList<Building>) absGUI.getObservableList( );
+    public ObservableList<String> getObsDepConnect() {
+        List<Department> list = new ControlerDaoDepartment().listDepartments();
         mapChcBoxBuild = new HashMap<>( );
         List<String> listNameBuild = new ArrayList<>( );
-        ObservableList<String> obsListNameBuild = FXCollections.observableArrayList( );
-        for (Building build : obsBuild) {
-            mapChcBoxBuild.put(build.getId( ), build);
-            listNameBuild.add(build.getNameBuilding( ));
-        }
-        obsListNameBuild.addAll(listNameBuild);
-        return obsListNameBuild;
+        list.forEach(department -> mapChcBoxBuild.put(department.getId(), department));
+        List<String> listNameDepartment = list.stream().map(department -> department.getNameDepartment()).collect(Collectors.toList());
+        ObservableList<String> obsListNameDep = FXCollections.observableArrayList(listNameDepartment);
+
+        return obsListNameDep;
+
+
+    }
+
+    public void setDepartmentChoiceBox(ChoiceBox<String > department, CheckBox helpPolic, CheckBox helpHosp, CheckBox help, CheckBox task ) {
+        department.getItems( ).addAll(getObsDepConnect());
+        department.getSelectionModel( ).selectedIndexProperty( ).addListener(new ChangeListener<Number>( ) {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldValue, Number newValue) {
+                ObservableList<String> obs = getObsDepConnect();
+                String value = obs.get(newValue.intValue( ));
+                List<Department> departmentList = new ControlerDaoDepartment().listDepartments( );
+                Optional<Department> optional = departmentList.stream( ).filter(d -> value.equals(d.getNameDepartment( ))).findAny( );
+                boolean typeHelpBool = optional.get( ).getTypeHelp( ).equals("Амбулаторно-поликлиническая");
+                boolean typeHospBool = optional.get( ).getTypeHelp( ).equals("Стационарная");
+                boolean helpBool = optional.get( ).getTypeTask( ).equals("Автоматизация лечебного процесса");
+                boolean taskBool = optional.get( ).getTypeTask( ).equals("Административно-хозяйственная деятельность");
+
+                helpPolic.setSelected(typeHelpBool);
+                helpHosp.setSelected(typeHospBool);
+                help.setSelected(helpBool);
+                task.setSelected(taskBool);
+
+
+            }
+        });
     }
 
     public static GUIConnections getControlerGUIConnections() {
@@ -345,7 +457,7 @@ public class GUIConnections extends AbstractGUIControler {
         return tableConnection;
     }
 
-    public static Map<Long, Building> getMapChcBoxBuild() {
+    public static Map<Long, Department> getMapChcBoxBuild() {
         return mapChcBoxBuild;
     }
 

@@ -195,6 +195,7 @@ public class GUIDepartment extends AbstractGUIControler{
             @Override
             public void handle(WindowEvent windowEvent) {
                 tableDepartment.setItems((ObservableList<Department>) getObservableList( ));
+                getCountRecordLabel().setText(String.valueOf(tableDepartment.getItems().size()));
             }
         });
 
@@ -260,6 +261,7 @@ public class GUIDepartment extends AbstractGUIControler{
         ControlerDaoDepartment controlerDaoDepartment = new ControlerDaoDepartment();
         controlerDaoDepartment.deleteDepartments(department.getId());
         tableDepartment.setItems((ObservableList<Department>) getObservableList( ));
+        getCountRecordLabel().setText(String.valueOf(tableDepartment.getItems().size()));
 
     }
 
@@ -290,7 +292,7 @@ public class GUIDepartment extends AbstractGUIControler{
     }
 
     public String[] getTypeTask() {
-        String[] array = new String[] {"Административно-хозяйственная деятельность", "Автоматизация лечебного процесса)"};
+        String[] array = new String[] {"Административно-хозяйственная деятельность", "Автоматизация лечебного процесса"};
         return array;
     }
 

@@ -123,14 +123,23 @@ public class ControlerDaoUnit {
     }
 
     public void deleteUnit(Long Id){
-        Session session = ControlerDaoDevice.getFactory().openSession();
+        Session session = ControlerDaoUnit.getFactory().openSession();
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
             Unit unit =  session.get(Unit.class, Id);
-            unit.setDepartment(null);
-            unit.setEmployees(null);
-            unit.setDevices(null);
+            if (unit.getDepartment() != null) {
+                unit.setDepartment(null);
+            }
+//            if (unit.getEmployees().size() != 0) {
+//                unit.setEmployees(unit.getEmployees().forEach(employee -> employee.););
+//            }
+            if (unit.getEmployees().size() != 0) {
+                unit.setEmployees(null);
+            }
+//            if (unit.getDevices().size() != 0) {
+//                unit.setDevices(null);
+//            }
             session.delete(unit);
             tx.commit();
         } catch (HibernateException e) {

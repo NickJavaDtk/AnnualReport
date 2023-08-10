@@ -32,6 +32,9 @@ public  class Department extends AbstractEntity {
     @OneToMany(mappedBy = "department")
     public Collection<Unit> departments = new ArrayList<>(  );
 
+    @OneToMany(mappedBy = "department")
+    public Collection<Connection> connections = new ArrayList<>();
+
     public Department() {
     }
 
